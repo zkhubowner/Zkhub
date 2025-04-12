@@ -420,65 +420,6 @@ local Toggle = MainTab:CreateToggle({
     end
 })
 
-local Section = MainTab:CreateSection("🏦Withdraw / Deposit🏧")
-
-
-local Player = game.Players.LocalPlayer
-local Cash = Player:WaitForChild("leaderstats"):WaitForChild("Cash")
-local Bank = Player.leaderstats:WaitForChild("Bank")
-
-MainTab:CreateInput({
-    Name = "Deposit Amount",
-    PlaceholderText = "Enter amount to deposit",
-    RemoveTextAfterFocusLost = false,
-    Callback = function(Value)
-        UserInput.DepositAmount = tonumber(Value) or 0
-    end,
-})
-
-MainTab:CreateButton({
-    Name = "Deposit",
-    Callback = function()
-        local amount = UserInput.DepositAmount
-        if Cash.Value >= amount and amount > 0 then
-            Cash.Value = Cash.Value - amount
-            Bank.Value = Bank.Value + amount
-        else
-            Rayfield:Notify({
-                Title = "Error",
-                Content = "Invalid or insufficient funds.",
-                Duration = 3,
-            })
-        end
-    end,
-})
-
-MainTab:CreateInput({
-    Name = "Withdraw Amount",
-    PlaceholderText = "Enter amount to withdraw",
-    RemoveTextAfterFocusLost = false,
-    Callback = function(Value)
-        UserInput.WithdrawAmount = tonumber(Value) or 0
-    end,
-})
-
-MainTab:CreateButton({
-    Name = "Withdraw",
-    Callback = function()
-        local amount = UserInput.WithdrawAmount
-        if Bank.Value >= amount and amount > 0 then
-            Bank.Value = Bank.Value - amount
-            Cash.Value = Cash.Value + amount
-        else
-            Rayfield:Notify({
-                Title = "Error",
-                Content = "Invalid or insufficient bank funds.",
-                Duration = 3,
-            })
-        end
-    end,
-})
-
 local PlayerTab = Window:CreateTab("🕴🏻Player", 4483362458) -- Title, Image
 local PlayerSection = PlayerTab:CreateSection("⏪Speed / Jump🆙")
 
