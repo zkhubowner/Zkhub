@@ -422,6 +422,11 @@ local Toggle = MainTab:CreateToggle({
 
 local Section = MainTab:CreateSection("🏦Withdraw / Deposit🏧")
 
+
+local Player = game.Players.LocalPlayer
+local Cash = Player:WaitForChild("leaderstats"):WaitForChild("Cash")
+local Bank = Player.leaderstats:WaitForChild("Bank")
+
 MainTab:CreateInput({
     Name = "Deposit Amount",
     PlaceholderText = "Enter amount to deposit",
