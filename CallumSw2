@@ -1,0 +1,334 @@
+loadstring(game:HttpGet('https://raw.githubusercontent.com/Pixeluted/adoniscries/refs/heads/main/Source.lua'))()
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local whitelist = {
+    "Kaisfrms2hub",  
+    "LAC_cal69",
+    "Player",
+    "Player",
+    "Player",
+}
+
+-- Function to check if a player is whitelisted (case-insensitive)
+local function isWhitelisted(player)
+    for _, username in ipairs(whitelist) do
+        if player.Name:lower() == username:lower() then
+            return true
+        end
+    end
+    return false
+end
+local Window = Rayfield:CreateWindow({
+   Name = "CALLUM | SW2 | PAYOUT",
+   Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+   LoadingTitle = "Loading...",
+   LoadingSubtitle = "By Kais",
+   Theme = {
+        TextColor = Color3.fromRGB(0, 205, 255), -- Red Text
+
+      Background = Color3.fromRGB(0, 0, 0), -- Black Background
+      Topbar = Color3.fromRGB(0, 0, 0), -- Black Topbar
+      Shadow = Color3.fromRGB(0, 0, 0), -- Black Shadow
+
+      NotificationBackground = Color3.fromRGB(0, 0, 0), -- Black Notification Background
+      NotificationActionsBackground = Color3.fromRGB(0, 205, 255), -- Red Notification Actions
+
+      TabBackground = Color3.fromRGB(0, 0, 0), -- Black Tab Background
+      TabStroke = Color3.fromRGB(0, 205, 255), -- Red Tab Border
+      TabBackgroundSelected = Color3.fromRGB(255, 0, 0), -- Red Selected Tab
+      TabTextColor = Color3.fromRGB(0, 205, 255), -- Red Tab Text
+      SelectedTabTextColor = Color3.fromRGB(0, 0, 0), -- Black Text on Selected Tab
+
+      ElementBackground = Color3.fromRGB(0, 0, 0), -- Black Element Background
+      ElementBackgroundHover = Color3.fromRGB(0, 0, 0), -- Hover stays Black
+      SecondaryElementBackground = Color3.fromRGB(0, 0, 0), -- Fully Black Secondary Elements
+      ElementStroke = Color3.fromRGB(0, 205, 255), -- Red Element Border
+      SecondaryElementStroke = Color3.fromRGB(0, 205, 255), -- Red Border on Secondary Element
+
+      SliderBackground = Color3.fromRGB(0, 205, 255), -- Red Slider Background
+      SliderProgress = Color3.fromRGB(0, 205, 255), -- Red Slider Progress
+      SliderStroke = Color3.fromRGB(0, 205, 255), -- Red Slider Stroke
+
+      ToggleBackground = Color3.fromRGB(0, 0, 0), -- Black Toggle Background
+      ToggleEnabled = Color3.fromRGB(0, 205, 255), -- Red When Enabled
+      ToggleDisabled = Color3.fromRGB(0, 0, 0), -- Black When Disabled
+      ToggleEnabledStroke = Color3.fromRGB(0, 205, 255), -- Red Border When Enabled
+      ToggleDisabledStroke = Color3.fromRGB(0, 0, 0), -- Black Border When Disabled
+      ToggleEnabledOuterStroke = Color3.fromRGB(0, 205, 255), -- Red Outer Stroke When Enabled
+      ToggleDisabledOuterStroke = Color3.fromRGB(0, 0, 0), -- Black Outer Stroke When Disabled
+
+      DropdownSelected = Color3.fromRGB(0, 205, 255), -- Red Selected Dropdown
+      DropdownUnselected = Color3.fromRGB(0, 0, 0), -- Black Unselected Dropdown
+
+      InputBackground = Color3.fromRGB(0, 0, 0), -- Black Input Background
+      InputStroke = Color3.fromRGB(0, 205, 255), -- Red Input Stroke
+      PlaceholderColor = Color3.fromRGB(0, 205, 255) -- Red Placeholder Text
+   },    
+
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil, -- Create a custom folder for your hub/game
+      FileName = "Big Hub"
+   },
+
+   Discord = {
+      Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
+      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
+      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+   },
+
+   KeySystem = false, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "Untitled",
+      Subtitle = "Key System",
+      Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
+      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
+})
+
+local MainTab = Window:CreateTab("Main", 4483362458) -- Title, Image
+local Section = MainTab:CreateSection("Main")
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local player = Players.LocalPlayer
+
+local dupeAmount = 10
+local StatusLabel = MainTab:CreateLabel("Status: Waiting for action...")
+
+-- Notification function with error handling
+local function notify(message, time, type)
+    local success, err = pcall(function()
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = type or "Info",
+            Text = message,
+            Duration = time or 5,
+        })
+    end)
+
+    if not success then
+        warn("Notification failed: " .. err)
+    end
+end
+
+-- Textbox for Duplication Amount
+MainTab:CreateInput({
+    Name = "Amount",
+    PlaceholderText = "Amount",
+    RemoveTextAfterFocusLost = false,
+    Flag = "DupeAmount",
+    Callback = function(value)
+        dupeAmount = tonumber(value) or 10
+        if dupeAmount <= 0 then
+            dupeAmount = 10  -- Fallback value
+            StatusLabel.Text = "Invalid amount, defaulting to 10."
+        end
+    end
+})
+
+-- Duplication Function
+local function duplicateCardsAndLaptops()
+    if dupeAmount <= 0 then
+        StatusLabel.Text = "Invalid amount!"
+        return
+    end
+
+    StatusLabel.Text = "Buying cards & laptops..."
+
+    -- Open Dealer UI
+    fireclickdetector(game.Workspace["Streetz War"].Anonymous.ClickDetector)
+    wait(0) -- Wait to ensure the UI is open
+    player.PlayerGui:WaitForChild("DealerGui")
+    local shopGui = player.PlayerGui.DealerGui.ShopFrame
+    shopGui.Visible = true
+    player.PlayerGui.DealerGui.Frame.Visible = false
+    game:GetService("RunService"):Set3dRenderingEnabled(false)
+
+    -- Position player correctly
+    repeat wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(-55, 4.5, 170)
+
+    wait(0.5)
+
+    -- Click buttons for purchasing
+    local cardButton = shopGui["Blank Card"]
+    local laptopButton = shopGui["laptop"]
+
+    for i = 1, dupeAmount do
+        task.wait()
+        -- Click the card button
+        if cardButton.Visible then
+            local cardPos = cardButton.AbsolutePosition
+            VirtualInputManager:SendMouseButtonEvent(cardPos.X + 150, cardPos.Y + 60, 0, true, game, 0)
+            task.wait(0.1)
+            VirtualInputManager:SendMouseButtonEvent(cardPos.X + 150, cardPos.Y + 60, 0, false, game, 0)
+        end
+
+        task.wait(0.1)
+
+        -- Click the laptop button
+        if laptopButton.Visible then
+            local laptopPos = laptopButton.AbsolutePosition
+            VirtualInputManager:SendMouseButtonEvent(laptopPos.X + 150, laptopPos.Y + 60, 0, true, game, 0)
+            task.wait(0.1)
+            VirtualInputManager:SendMouseButtonEvent(laptopPos.X + 150, laptopPos.Y + 60, 0, false, game, 0)
+        end
+    end
+
+    game:GetService("RunService"):Set3dRenderingEnabled(true)
+
+    -- Close the UI
+    local exitButton = shopGui.exit
+    VirtualInputManager:SendMouseButtonEvent(exitButton.AbsolutePosition.X + 300, exitButton.AbsolutePosition.Y + 65, 0, true, game, 0)
+    wait()
+    VirtualInputManager:SendMouseButtonEvent(exitButton.AbsolutePosition.X + 300, exitButton.AbsolutePosition.Y + 65, 0, false, game, 0)
+
+    -- Move player to next step
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(954, 4.7, -61)
+    wait(4)
+
+    -- Process Laptops
+    StatusLabel.Text = "Processing laptops..."
+    local laptopCount = 0
+    for _, v in pairs(player.Backpack:GetChildren()) do
+        if v.Name == "Laptop" then
+            laptopCount = laptopCount + 1
+        end
+    end
+
+    for i = 1, laptopCount - 1 do
+        spawn(function()
+            local args = { true, "NEW123" }
+            ReplicatedStorage.Assets.Other.GiverPunchmade:InvokeServer(unpack(args))
+        end)
+    end
+
+    wait(4)
+    player.Backpack.Laptop.Parent = player.Character
+    wait(4)
+
+    -- Process Cards
+    StatusLabel.Text = "Processing cards..."
+    local cardCount = 0
+    for _, v in pairs(player.Backpack:GetChildren()) do
+        if v.Name == "Loaded Card" then
+            cardCount = cardCount + 1
+        end
+    end
+
+    for i = 1, cardCount do
+        spawn(function()
+            local args = { false, "NEW123" }
+            ReplicatedStorage.Assets.Other.GiverPunchmade:InvokeServer(unpack(args))
+        end)
+    end
+
+    wait(1)
+    StatusLabel.Text = "Duplication Complete!"
+    player.Character.Humanoid:UnequipTools()
+end
+
+
+MainTab:CreateButton({
+        Name = "Duplication Card & Laptop",
+    Callback = function()
+        duplicateCardsAndLaptops()
+    
+        end
+})
+
+local Section = MainTab:CreateSection("Main")
+
+local Toggle = MainTab:CreateToggle({
+   Name = "Dupe gun",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+               local player = game.Players.LocalPlayer
+        local character = player.Character or player.CharacterAdded:Wait()
+        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+        local safeZones = game.Workspace.SafeZones:GetChildren()
+        
+        local closestSafeZone = nil
+        local shortestDistance = math.huge 
+
+        for _, safeZone in ipairs(safeZones) do
+            local distance = (humanoidRootPart.Position - safeZone.Position).Magnitude
+            if distance < shortestDistance then
+                shortestDistance = distance
+                closestSafeZone = safeZone
+            end
+        end
+        
+        if closestSafeZone then
+            humanoidRootPart.CFrame = closestSafeZone.CFrame
+            character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead) 
+        else
+            warn("No safe zones found.")
+        end
+    end
+})
+
+local TeleportsTab = Window:CreateTab("Teleports", 4483362458) -- Title, Image
+local TeleportsSection = TeleportsTab:CreateSection("Player Teleports")
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local dkIsANigger = {}
+
+for _, player in ipairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer then
+        table.insert(dkIsANigger, player.Name)
+    end
+end
+
+local TeleportDropdown = TeleportsTab:CreateDropdown({
+    Name = "Players",
+    Options = dkIsANigger,
+    CurrentOption = {},
+    MultipleOptions = false,
+    Flag = "PlayerDropdown",
+    Callback = function(Options)
+        SelectedPlayer = Options[1]
+    end,
+})
+
+local function UpdateDropdown()
+    local ExistingPlayers = {}
+    for _, name in ipairs(dkIsANigger) do
+        ExistingPlayers[name] = true
+    end
+
+    local NewOptions = {}
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            table.insert(NewOptions, player.Name)
+        end
+    end
+
+    dkIsANigger = NewOptions
+    TeleportDropdown:Set(dkIsANigger)
+end
+
+local TeleportButton = TeleportsTab:CreateButton({
+    Name = "Teleport",
+    Callback = function()
+        local TargetPlayer = Players:FindFirstChild(SelectedPlayer)
+        if TargetPlayer and TargetPlayer.Character and LocalPlayer.Character then
+            LocalPlayer.Character:SetPrimaryPartCFrame(TargetPlayer.Character:GetPrimaryPartCFrame())
+        end
+    end,
+})
+
+local RefreshButton = TeleportsTab:CreateButton({
+    Name = "Refresh Players",
+    Callback = UpdateDropdown,
+})
+
