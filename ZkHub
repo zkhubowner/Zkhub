@@ -1,1 +1,123 @@
-Soon..
+-- Load Rayfield UI Library
+local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Rayfield/main/source"))()
+
+local Window = Rayfield:CreateWindow({
+    Name = "Fisch Hub - Auto Fisher",
+    LoadingTitle = "Fisch Auto Fisher",
+    LoadingSubtitle = "by yourboyGPT",
+    ConfigurationSaving = {
+        Enabled = false
+    },
+    Discord = {
+        Enabled = false
+    },
+    KeySystem = false
+})
+
+-- Variables
+local autoEquip = false
+local autoShake = false
+local autoFarm = false
+
+local player = game.Players.LocalPlayer
+local rodName = "FishingRod" -- Replace with actual rod name if it's different
+
+-- Functions
+function equipRod()
+    local backpack = player:FindFirstChild("Backpack")
+    if backpack and backpack:FindFirstChild(rodName) then
+        backpack[rodName].Parent = player.Character
+    end
+end
+
+function shakeRod()
+    local rod = player.Character and player.Character:FindFirstChild(rodName)
+    if rod and rod:IsA("Tool") then
+        rod:Activate()
+    end
+end
+
+-- Auto Equip Loop
+task.spawn(function()
+    while true do
+        if autoEquip then
+            equipRod()
+        end
+        task.wait(1)
+    end
+end)
+
+-- Auto Shake Loop
+task.spawn(function()
+    while true do
+        if autoShake then
+            shakeRod()
+        end
+        task.wait(2) -- Adjust as needed
+    end
+end)
+
+-- Auto Farm Loop (Equip + Cast + Wait + Catch)
+task.spawn(function()
+    while true do
+        if autoFarm then
+            equipRod()
+            task.wait(0.5)
+            shakeRod() -- Cast
+            task.wait(3) -- Wait for bite (adjust based on game)
+            shakeRod() -- Catch
+        end
+        task.wait(1)
+    end
+end)
+
+-- UI Buttons & Toggles
+local MainTab = Window:CreateTab("Main", 4483362458)
+
+MainTab:CreateToggle({
+    Name = "Auto Equip Rod",
+    CurrentValue = false,
+    Callback = function(Value)
+        autoEquip = Value
+    end
+})
+
+MainTab:CreateToggle({
+    Name = "Auto Shake Rod",
+    CurrentValue = false,
+    Callback = function(Value)
+        autoShake = Value
+    end
+})
+
+MainTab:CreateToggle({
+    Name = "Auto Farm (Cast + Catch)",
+    CurrentValue = false,
+    Callback = function(Value)
+        autoFarm = Value
+    end
+})
+
+MainTab:CreateButton({
+    Name = "Manual Equip Rod",
+    Callback = function()
+        equipRod()
+        Rayfield:Notify({
+            Title = "Rod Equipped!",
+            Content = "Fishing rod moved to your character.",
+            Duration = 2
+        })
+    end
+})
+
+MainTab:CreateButton({
+    Name = "Manual Shake Rod",
+    Callback = function()
+        shakeRod()
+        Rayfield:Notify({
+            Title = "Rod Activated!",
+            Content = "You shook the rod manually.",
+            Duration = 2
+        })
+    end
+})
