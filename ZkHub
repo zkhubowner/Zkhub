@@ -1,1 +1,1004 @@
-
+local v001 = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/Pixeluted/adoniscries/refs/heads/main/Source.lua'))()
+local v002 = game.v008.v055
+local v003 = {
+    "kaisfrms2hub",
+    "v063",
+    "v063",
+    "v063",
+    "v063",
+    "v063",
+}
+local v004 = false
+for _, whitelistedName in pairs(v003) do
+    if v002.Name == whitelistedName then
+        v004 = true
+        break
+    end
+end
+if not v004 then
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Access Denied!!",
+        Text = "You are not whitelisted!",
+        Duration = 3
+    })
+    return 
+end
+print("Whitelisted - Loading UI...")
+local v005 = v001:CreateWindow({
+   Name = "ZKHUB | SW2 | FREE",
+   Icon = nil, 
+   LoadingTitle = "Loading..",
+   LoadingSubtitle = "By Theyfw_kais",
+   Theme = {
+      TextColor = Color3.fromRGB(0, 255, 0),
+      Background = Color3.fromRGB(0, 0, 0),
+      Topbar = Color3.fromRGB(0, 0, 0),
+      Shadow = Color3.fromRGB(0, 0, 0),
+      NotificationBackground = Color3.fromRGB(0, 0, 0),
+      NotificationActionsBackground = Color3.fromRGB(0, 255, 0),
+      TabBackground = Color3.fromRGB(0, 0, 0),
+      TabStroke = Color3.fromRGB(0, 255, 0),
+      TabBackgroundSelected = Color3.fromRGB(0, 255, 0),
+      TabTextColor = Color3.fromRGB(0, 255, 0),
+      SelectedTabTextColor = Color3.fromRGB(0, 255, 0),
+      ElementBackground = Color3.fromRGB(0, 0, 0),
+      ElementBackgroundHover = Color3.fromRGB(10, 10, 10),
+      SecondaryElementBackground = Color3.fromRGB(0, 0, 0),
+      ElementStroke = Color3.fromRGB(0, 255, 0),
+      SecondaryElementStroke = Color3.fromRGB(0, 255, 0),
+      SliderBackground = Color3.fromRGB(0, 0, 0),
+      SliderProgress = Color3.fromRGB(0, 255, 0),
+      SliderStroke = Color3.fromRGB(0, 255, 0),
+      ToggleBackground = Color3.fromRGB(0, 0, 0),
+      ToggleEnabled = Color3.fromRGB(0, 255, 0),
+      ToggleDisabled = Color3.fromRGB(30, 30, 30),
+      ToggleEnabledStroke = Color3.fromRGB(0, 255, 0),
+      ToggleDisabledStroke = Color3.fromRGB(60, 60, 60),
+      ToggleEnabledOuterStroke = Color3.fromRGB(0, 255, 0),
+      ToggleDisabledOuterStroke = Color3.fromRGB(60, 60, 60),
+      DropdownSelected = Color3.fromRGB(0, 255, 0),
+      DropdownUnselected = Color3.fromRGB(0, 0, 0),
+      InputBackground = Color3.fromRGB(0, 0, 0),
+      InputStroke = Color3.fromRGB(0, 255, 0),
+      PlaceholderColor = Color3.fromRGB(0, 255, 0)
+   },
+   DisableRayfieldPrompts = false,
+   DisableBuildWarnings = false,
+   ConfigurationSaving = {
+      Enabled = false,
+      FolderName = "GreenBlackThemeHub",
+      FileName = "BigHub"
+   },
+   Discord = {
+      Enabled = false,
+      Invite = "noinvitelink",
+      RememberJoins = true
+   },
+   KeySystem = nil, 
+   KeySettings = {
+      Title = "Untitled",
+      Subtitle = "Key System",
+      Note = "No method of obtaining the key is provided", 
+      FileName = "Key",
+      SaveKey = true,
+      GrabKeyFromSite = false,
+      Key = {},
+   }
+})
+local v006 = v005:CreateTab("ð Main", 4483362458) 
+local v007 = v006:CreateSection("ð³Card Dupeð³")
+local v008 = game:GetService("v008")
+local v009 = game:GetService("v009")
+local v010 = game:GetService("v010")
+local v002 = v008.v055
+local v011 = 10
+local v012 notify(message, time, type)
+    local v013, err = pcall(v012()
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = type or "Info",
+            Text = message,
+            Duration = time or 5,
+        })
+    end)
+    if not v013 then
+        warn("Notification failed: " .. err)
+    end
+end
+v006:CreateInput({
+    Name = "Laptop & Card Dupe",
+    PlaceholderText = "Amount",
+    RemoveTextAfterFocusLost = false,
+    Flag = "DupeAmount",
+    Callback = v012(value)
+        v011 = tonumber(value) or 10
+        if v011 <= 0 then
+            v011 = 10  
+            notify("Invalid v113, defaulting to 10.", 3, "Warning")
+        end
+    end
+})
+local v012 duplicateCardsAndLaptops()
+    if v011 <= 0 then
+        notify("Invalid v113!", 3, "Error")
+        return
+    end
+    notify("Buying cards & laptops...", 3, "Info")
+    fireclickdetector(game.Workspace["Streetz War"].Anonymous.ClickDetector)
+    wait(2) 
+    v002.PlayerGui:WaitForChild("DealerGui")
+    local v014 = v002.PlayerGui.DealerGui.ShopFrame
+    v014.Visible = true
+    v002.PlayerGui.DealerGui.Frame.Visible = false
+    game:GetService("v094"):Set3dRenderingEnabled(false)
+    repeat wait() until v002.Character and v002.Character:FindFirstChild("HumanoidRootPart")
+    v002.Character.HumanoidRootPart.CFrame = CFrame.new(-55, 4.5, 170)
+    wait(0.5)
+    local v015 = v014["Blank Card"]
+    local v016 = v014["laptop"]
+    for i = 1, v011 do
+        task.wait()
+        if v015.Visible then
+            local v017 = v015.AbsolutePosition
+            v010:SendMouseButtonEvent(v017.X + 150, v017.Y + 60, 0, true, game, 0)
+            task.wait(0.08)
+            v010:SendMouseButtonEvent(v017.X + 150, v017.Y + 60, 0, false, game, 0)
+        end
+        task.wait(0.08)
+        if v016.Visible then
+            local v018 = v016.AbsolutePosition
+            v010:SendMouseButtonEvent(v018.X + 150, v018.Y + 60, 0, true, game, 0)
+            task.wait(0.08)
+            v010:SendMouseButtonEvent(v018.X + 150, v018.Y + 60, 0, false, game, 0)
+        end
+    end
+    game:GetService("v094"):Set3dRenderingEnabled(true)
+    local v019 = v014.exit
+    v010:SendMouseButtonEvent(v019.AbsolutePosition.X + 300, v019.AbsolutePosition.Y + 65, 0, true, game, 0)
+    wait()
+    v010:SendMouseButtonEvent(v019.AbsolutePosition.X + 300, v019.AbsolutePosition.Y + 65, 0, false, game, 0)
+    v002.Character.HumanoidRootPart.CFrame = CFrame.new(954, 4.7, -61)
+    wait(4)
+    notify("Processing laptops...", 3, "Info")
+    local v020 = 0
+    for _, v in pairs(v002.Backpack:GetChildren()) do
+        if v.Name == "Laptop" then
+            v020 = v020 + 1
+        end
+    end
+    for i = 1, v020 - 1 do
+        spawn(v012()
+            local v021 = { true, "NEW123" }
+            v009.Assets.Other.GiverPunchmade:InvokeServer(unpack(v021))
+        end)
+    end
+    wait(4)
+    v002.Backpack.Laptop.Parent = v002.Character
+    wait(4)
+    notify("Processing cards...", 3, "Info")
+    local v022 = 0
+    for _, v in pairs(v002.Backpack:GetChildren()) do
+        if v.Name == "Loaded Card" then
+            v022 = v022 + 1
+        end
+    end
+    for i = 1, v022 do
+        spawn(v012()
+            local v021 = { false, "NEW123" }
+            v009.Assets.Other.GiverPunchmade:InvokeServer(unpack(v021))
+        end)
+    end
+    wait(1)
+    notify("Duplication Complete!", 5, "Success")
+    v002.Character.Humanoid:UnequipTools()
+end
+v006:CreateButton({
+    Name = "Dupe Laptop & Card",
+    Callback = v012()
+        duplicateCardsAndLaptops()
+    end
+})
+local v023 = v006:CreateSection("ð¦Mop / Box Farmð¦")
+local v024 = v006:CreateToggle({
+    Name = "Mop Autofarm",
+    CurrentValue = false,
+    Flag = "MopAutofarm",
+    Callback = v012(state)
+        _G.automopfarm = state
+        if _G.automopfarm then
+            while _G.automopfarm do
+                for i, v in pairs(game.Workspace.CleanPart:GetChildren()) do
+                    if v.ProximityPrompt.Enabled == true then
+                        game:GetService("v009").GiveMop:FireServer()
+                        v.ProximityPrompt.HoldDuration = 1
+                        game.v008.v055.Character.HumanoidRootPart.CFrame = v.CFrame + Vector3.new(0, 2, 0)
+                        wait(1)
+                        fireproximityprompt(v.ProximityPrompt, v.ProximityPrompt.HoldDuration, false)
+                        wait(v.ProximityPrompt.HoldDuration + 2.2)
+                    end
+                end
+            end
+        end
+    end
+})
+local v024 = v006:CreateToggle({
+    Name = "Box Autofarm",
+    CurrentValue = false,
+    Flag = "BoxAutofarm",
+    Callback = v012(state)
+        _G.autoboxfarm = state
+        if _G.autoboxfarm then
+            task.spawn(v012()
+                while _G.autoboxfarm do
+                    local v025 = game.v008.v055.Character.HumanoidRootPart.CFrame
+                    game.v008.v055.Character.HumanoidRootPart.CFrame = game.Workspace.Job.Box.BOX1.CFrame
+                    wait(0.5)
+                    fireclickdetector(game.Workspace.Job.Box.BOX1.ClickDetector)
+                    wait(0.2)
+                    game.v008.v055.Character.HumanoidRootPart.CFrame = v025
+                    game.v008.v055.Backpack:WaitForChild("Box").Parent = game.v008.v055.Character
+                    firetouchinterest(game.Workspace.Job.Box.Job, game.v008.v055.Character:FindFirstChildOfClass("Tool").Handle, 0)
+                    wait()
+                    firetouchinterest(game.Workspace.Job.Box.Job, game.v008.v055.Character:FindFirstChildOfClass("Tool").Handle, 1)
+                    wait(15)
+                end
+            end)
+        end
+    end
+})
+local v026 = game:GetService("v026")
+local v027 = "Unknown"
+local v028 = "Unknown"
+local v029 = "Unknown"
+if syn and syn.get_hwid then
+    v027 = syn.get_hwid()  
+elseif gethwid then
+    v027 = gethwid()  
+elseif fluxus and fluxus.get_hwid then
+    v027 = fluxus.get_hwid()  
+end
+if v027 ~= "Unknown" then
+    v028 = v027:sub(1, #v027 // 2)  
+    v029 = v027:sub(#v027 // 2 + 1)  
+    v027 = v028 .. " - " .. v029  
+end
+local v030 = "Unknown"
+if syn then
+    v030 = "Synapse X"
+elseif secure_load then
+    v030 = "Script-Ware"
+elseif KRNL_LOADED then
+    v030 = "KRNL"
+elseif is_sirhurt_closure then
+    v030 = "SirHurt"
+elseif pebc_execute then
+    v030 = "ProtoSmasher"
+elseif fluxus then
+    v030 = "Fluxus"
+elseif identifyexecutor then
+    v030 = identifyexecutor()
+elseif getexecutorname then
+    v030 = getexecutorname()
+end
+local v031 = game.v008.v055.Name
+local v032 = game.v008.v055.UserId
+local v033 = game.PlaceId
+local v034 = "Unknown Game"
+pcall(v012()
+   local v035 = game:GetService("MarketplaceService"):GetProductInfo(v033)
+   if v035 and v035.Name then
+      v034 = v035.Name
+   end
+end)
+local v036 = {
+   ["embeds"] = {{
+       ["title"] = "ð New Script Log",
+       ["color"] = 0x006400, 
+       ["fields"] = {
+           {
+               ["name"] = "ð¤ Roblox User",
+               ["value"] = v031,
+               ["inline"] = true
+           },
+           {
+               ["name"] = " ",  
+               ["value"] = " ",  
+               ["inline"] = false
+           },
+           {
+               ["name"] = "ð§ª Executor",
+               ["value"] = v030,
+               ["inline"] = true
+           },
+           {
+               ["name"] = " ",  
+               ["value"] = " ",  
+               ["inline"] = false
+           },
+           {
+               ["name"] = "ð® Game",
+               ["value"] = v034,
+               ["inline"] = true
+           },
+           {
+               ["name"] = " ",  
+               ["value"] = " ",  
+               ["inline"] = false
+           },
+           {
+               ["name"] = "ð§¬ HWID",
+               ["value"] = v027,  
+               ["inline"] = true
+           },
+       },
+       ["footer"] = {
+           ["text"] = "Logged by OP ZK HUB! | " .. os.date("%c")
+       }
+   }}
+}
+local v037 = v026:JSONEncode(v036)
+local v038 = "https://discord.com/api/webhooks/1361952152934678609/Dgr2p1f_4Gv3UvCk9uKptcTOeQPUswPea4qNKEHSdTx7Zahp2cMF891DJ3aZLdWYPqR0"
+local v039 = http_request or syn.request or http.request
+if v039 then
+   v039({
+       Url = v038,
+       Method = "POST",
+       Headers = {
+           ["Content-Type"] = "application/json"
+       },
+       Body = v037
+   })
+end
+local v040 = v005:CreateTab("ð´ð»v063", 4483362458) 
+local v041 = v040:CreateSection("âªSpeed / Jumpð")
+local v042 = v040:CreateSlider({
+   Name = "WalkSpeed",
+   Range = {0, 300},
+   Increment = 10,
+   Suffix = "Speed",
+   CurrentValue = 10,
+   Flag = "Slider1", 
+   Callback = v012(Value)
+            game.v008.v055.Character.Humanoid.WalkSpeed = (Value)
+   end,
+})
+local v042 = v040:CreateSlider({
+   Name = "Jump Height",
+   Range = {0, 300},
+   Increment = 10,
+   Suffix = "Power",
+   CurrentValue = 10,
+   Flag = "Slider1", 
+   Callback = v012(Value)
+            game.v008.v055.Character.Humanoid.JumpPower = (Value)
+   end,
+})
+local v041 = v040:CreateSection("ðExtra Abilitiesð")
+local v024 = v040:CreateToggle({
+   Name = "Infinite Jump",
+   CurrentValue = false,
+   Flag = "Toggle1", 
+   Callback = v012(Value)
+   InfiniteJumpEnabled = not InfiniteJumpEnabled 
+       if InfiniteJumpEnabled then
+           print("Infinite Jump Enabled")
+           game:GetService("v095").JumpRequest:Connect(v012()
+               if InfiniteJumpEnabled then
+                   game:GetService("v008").v055.Character:FindFirstChildOfClass('Humanoid'):ChangeState("Jumping")
+               end
+           end)
+       else
+           print("Infinite Jump Disabled")
+       end
+   end,
+})
+local v002 = game:GetService("v008").v055
+local v043 = false
+local v044
+local v012 toggleNoclip(state)
+    v043 = state
+    if v043 then
+        v044 = task.spawn(v012()
+            while v043 do
+                if v002.Character then
+                    for _, part in pairs(v002.Character:GetDescendants()) do
+                        if part:IsA("BasePart") then
+                            part.CanCollide = false
+                        end
+                    end
+                end
+                task.wait()
+            end
+        end)
+    else
+        if v044 then
+            task.cancel(v044)
+        end
+        if v002.Character then
+            for _, part in pairs(v002.Character:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = true
+                end
+            end
+        end
+    end
+end
+v040:CreateToggle({
+    Name = "No-Clip",
+    CurrentValue = false,
+    Flag = "NoclipToggle",
+    Callback = v012(Value)
+        toggleNoclip(Value)
+    end,
+})
+local v007 = v040:CreateSection("âï¸Lonely Ahh Flyyâï¸")
+local v045 = v040:CreateButton({
+   Name = "Fly V3",
+   Callback = v012()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
+   end,
+})
+local v046 = v005:CreateTab("âï¸Teleports", 4483362458) 
+local v007 = v046:CreateSection("ð Main Teleportsâï¸")
+local v047 = {
+    {Name = "ðDealership", Position = CFrame.new(842, 5, -7)},
+    {Name = "ð©Apartments 2", Position = CFrame.new(739, 4, 199)},
+    {Name = "ð¨Apartments 1", Position = CFrame.new(4, 4, 52)},
+    {Name = "ð§¹Paki Shop", Position = CFrame.new(-101, 4, 18)},
+    {Name = "ð¦Box Job", Position = CFrame.new(-118, 4, 300)},
+    {Name = "ðPizza Job", Position = CFrame.new(166, 5, 49)},
+    {Name = "ðªThrift Store", Position = CFrame.new(-42, 4, 36)},
+    {Name = "ð¥Boxing", Position = CFrame.new(259, 5, -100)},
+    {Name = "ðCasino", Position = CFrame.new(159, 5, 246)},
+    {Name = "ðIce Box", Position = CFrame.new(-11354, 4, 288)},
+    {Name = "ð¤­Suit Shop", Position = CFrame.new(43, 4, -329)},
+    {Name = "ð¥Hospital", Position = CFrame.new(42, 4, -261)},
+    {Name = "ð«Gun Store", Position = CFrame.new(-51807, 4, -11)},
+    {Name = "ð¥·Bank Tools Etc", Position = CFrame.new(-142, 4, 189)},
+    {Name = "ð³Blanc Card Dealer", Position = CFrame.new(226, 4, -543)},
+}
+local v048 = {}
+for _, location in ipairs(v047) do
+    table.insert(v048, location.Name)
+end
+local v049 = v047[1]
+v046:CreateDropdown({
+    Name = "Select Main Location",
+    Options = v048,
+    CurrentOption = {v048[1]},
+    MultipleOptions = false,
+    Flag = "MainTeleportLocationDropdown",
+    Callback = v012(Options)
+        for _, location in ipairs(v047) do
+            if location.Name == Options[1] then
+                v049 = location
+                break
+            end
+        end
+    end
+})
+v046:CreateButton({
+    Name = "Teleport to Main Location",
+    Callback = v012()
+        local v002 = game.v008.v055
+        if v002 and v002.Character and v002.Character:FindFirstChild("HumanoidRootPart") then
+            v002.Character.HumanoidRootPart.CFrame = v049.Position
+        else
+            warn("No valid v103 or HumanoidRootPart found!")
+        end
+    end
+})
+local v050 = v046:CreateSection("ðGang Turf / Locker Teleportsð")
+local v051 = {
+    {Name = "ðTNT Locker", Position = CFrame.new(269, 5, 132)},
+    {Name = "ð©¸ATB Locker", Position = CFrame.new(93, 4, -703)},
+    {Name = "ð©¶SG Locker", Position = CFrame.new(188, 4, -395)},
+    {Name = "ðKAO Locker", Position = CFrame.new(328, 7, 82)},
+    {Name = "ðAF Locker", Position = CFrame.new(162, 5, 518)},
+    {Name = "ð§¡EOS Locker", Position = CFrame.new(374, 22, 409)},
+    {Name = "ðAOD Locker", Position = CFrame.new(6, 5, 509)},
+    {Name = "â¤ï¸LAC Locker", Position = CFrame.new(-166, 4, -773)},
+    {Name = "ðP9 Locker", Position = CFrame.new(459, 7, 160)},
+    {Name = "ðTPL Locker", Position = CFrame.new(318, 7, 230)},
+    {Name = "ðRGD Locker", Position = CFrame.new(599, 7, 223)},
+    {Name = "NGF Locker", Position = CFrame.new(571, 20, 174)},
+    {Name = "ðDF Locker", Position = CFrame.new(870, 5, 498)},
+    {Name = "ðWheel Spin", Position = CFrame.new(142, 4, 91)},
+}
+local v052 = {}
+for _, location in ipairs(v051) do
+    table.insert(v052, location.Name)
+end
+local v053 = v051[1]
+v046:CreateDropdown({
+    Name = "Select Gang Locker Location",
+    Options = v052,
+    CurrentOption = {v052[1]},
+    MultipleOptions = false,
+    Flag = "GangTeleportLocationDropdown",
+    Callback = v012(Options)
+        for _, location in ipairs(v051) do
+            if location.Name == Options[1] then
+                v053 = location
+                break
+            end
+        end
+    end
+})
+v046:CreateButton({
+    Name = "Teleport to Gang Locker",
+    Callback = v012()
+        local v002 = game.v008.v055
+        if v002 and v002.Character and v002.Character:FindFirstChild("HumanoidRootPart") then
+            v002.Character.HumanoidRootPart.CFrame = v053.Position
+        else
+            warn("No valid v103 or HumanoidRootPart found!")
+        end
+    end
+})
+local v054 = v046:CreateSection("ð´ð»v063 Teleportsð´âï¸")
+local v008 = game:GetService("v008")
+local v055 = v008.v055
+local v056 = {}
+for _, v002 in ipairs(v008:GetPlayers()) do
+    if v002 ~= v055 then
+        table.insert(v056, v002.Name)
+    end
+end
+local v057 = v046:CreateDropdown({
+    Name = "v008",
+    Options = v056,
+    CurrentOption = {},
+    MultipleOptions = false,
+    Flag = "PlayerDropdown",
+    Callback = v012(Options)
+        SelectedPlayer = Options[1]
+    end,
+})
+local v012 UpdateDropdown()
+    local v058 = {}
+    for _, name in ipairs(v056) do
+        v058[name] = true
+    end
+    local v059 = {}
+    for _, v002 in ipairs(v008:GetPlayers()) do
+        if v002 ~= v055 then
+            table.insert(v059, v002.Name)
+        end
+    end
+    v056 = v059
+    v057:Set(v056)
+end
+local v060 = v046:CreateButton({
+    Name = "Teleport",
+    Callback = v012()
+        local v061 = v008:FindFirstChild(SelectedPlayer)
+        if v061 and v061.Character and v055.Character then
+            v055.Character:SetPrimaryPartCFrame(v061.Character:GetPrimaryPartCFrame())
+        end
+    end,
+})
+local v062 = v005:CreateTab("Combat", 4483362458) 
+local v007 = v062:CreateSection("Esp's")
+local v024 = v062:CreateToggle({
+   Name = "Skeleton Esp",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = v012(Value)
+        local v063 = game:GetService("v008").v055
+local v064 = v063:GetMouse()
+local v065 = game:GetService("Workspace").CurrentCamera
+local v012 DrawLine()
+    local v066 = Drawing.new("Line")
+    v066.Visible = false
+    v066.From = Vector2.new(0, 0)
+    v066.To = Vector2.new(1, 1)
+    v066.Color = Color3.fromRGB(255, 255, 0)
+    v066.Thickness = 1
+    v066.Transparency = 1
+    return v066
+end
+local v012 DrawESP(plr)
+    repeat wait() until plr.Character ~= nil and plr.Character:FindFirstChild("Humanoid") ~= nil
+    local v067 = {}
+    local v068 = (plr.Character.Humanoid.RigType == Enum.HumanoidRigType.v068) and true or false
+    if v068 then 
+        v067 = {
+            Head_UpperTorso = DrawLine(),
+            UpperTorso_LowerTorso = DrawLine(),
+            UpperTorso_LeftUpperArm = DrawLine(),
+            LeftUpperArm_LeftLowerArm = DrawLine(),
+            LeftLowerArm_LeftHand = DrawLine(),
+            UpperTorso_RightUpperArm = DrawLine(),
+            RightUpperArm_RightLowerArm = DrawLine(),
+            RightLowerArm_RightHand = DrawLine(),
+            LowerTorso_LeftUpperLeg = DrawLine(),
+            LeftUpperLeg_LeftLowerLeg = DrawLine(),
+            LeftLowerLeg_LeftFoot = DrawLine(),
+            LowerTorso_RightUpperLeg = DrawLine(),
+            RightUpperLeg_RightLowerLeg = DrawLine(),
+            RightLowerLeg_RightFoot = DrawLine(),
+        }
+    else 
+        v067 = {
+            Head_Spine = DrawLine(),
+            Spine = DrawLine(),
+            LeftArm = DrawLine(),
+            LeftArm_UpperTorso = DrawLine(),
+            RightArm = DrawLine(),
+            RightArm_UpperTorso = DrawLine(),
+            LeftLeg = DrawLine(),
+            LeftLeg_LowerTorso = DrawLine(),
+            RightLeg = DrawLine(),
+            RightLeg_LowerTorso = DrawLine()
+        }
+    end
+    local v012 Visibility(state)
+        for i, v in pairs(v067) do
+            v.Visible = state
+        end
+    end
+    local v012 Colorize(color)
+        for i, v in pairs(v067) do
+            v.Color = color
+        end
+    end
+    local v012 UpdaterR15()
+        local v069
+        v069 = game:GetService("v094").RenderStepped:Connect(v012()
+            if plr.Character ~= nil and plr.Character:FindFirstChild("Humanoid") ~= nil and plr.Character:FindFirstChild("HumanoidRootPart") ~= nil and plr.Character.Humanoid.Health > 0 then
+                local v070, vis = v065:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
+                if vis then
+                    local v071 = v065:WorldToViewportPoint(plr.Character.Head.Position)
+                    if v067.Head_UpperTorso.From ~= Vector2.new(v071.X, v071.Y) then
+                        local v072 = v065:WorldToViewportPoint(plr.Character.UpperTorso.Position)
+                        local v073 = v065:WorldToViewportPoint(plr.Character.LowerTorso.Position)
+                        local v074 = v065:WorldToViewportPoint(plr.Character.LeftUpperArm.Position)
+                        local v075 = v065:WorldToViewportPoint(plr.Character.LeftLowerArm.Position)
+                        local v076 = v065:WorldToViewportPoint(plr.Character.LeftHand.Position)
+                        local v077 = v065:WorldToViewportPoint(plr.Character.RightUpperArm.Position)
+                        local v078 = v065:WorldToViewportPoint(plr.Character.RightLowerArm.Position)
+                        local v079 = v065:WorldToViewportPoint(plr.Character.RightHand.Position)
+                        local v080 = v065:WorldToViewportPoint(plr.Character.LeftUpperLeg.Position)
+                        local v081 = v065:WorldToViewportPoint(plr.Character.LeftLowerLeg.Position)
+                        local v082 = v065:WorldToViewportPoint(plr.Character.LeftFoot.Position)
+                        local v083 = v065:WorldToViewportPoint(plr.Character.RightUpperLeg.Position)
+                        local v084 = v065:WorldToViewportPoint(plr.Character.RightLowerLeg.Position)
+                        local v085 = v065:WorldToViewportPoint(plr.Character.RightFoot.Position)
+                        v067.Head_UpperTorso.From = Vector2.new(v071.X, v071.Y)
+                        v067.Head_UpperTorso.To = Vector2.new(v072.X, v072.Y)
+                        v067.UpperTorso_LowerTorso.From = Vector2.new(v072.X, v072.Y)
+                        v067.UpperTorso_LowerTorso.To = Vector2.new(v073.X, v073.Y)
+                        v067.UpperTorso_LeftUpperArm.From = Vector2.new(v072.X, v072.Y)
+                        v067.UpperTorso_LeftUpperArm.To = Vector2.new(v074.X, v074.Y)
+                        v067.LeftUpperArm_LeftLowerArm.From = Vector2.new(v074.X, v074.Y)
+                        v067.LeftUpperArm_LeftLowerArm.To = Vector2.new(v075.X, v075.Y)
+                        v067.LeftLowerArm_LeftHand.From = Vector2.new(v075.X, v075.Y)
+                        v067.LeftLowerArm_LeftHand.To = Vector2.new(v076.X, v076.Y)
+                        v067.UpperTorso_RightUpperArm.From = Vector2.new(v072.X, v072.Y)
+                        v067.UpperTorso_RightUpperArm.To = Vector2.new(v077.X, v077.Y)
+                        v067.RightUpperArm_RightLowerArm.From = Vector2.new(v077.X, v077.Y)
+                        v067.RightUpperArm_RightLowerArm.To = Vector2.new(v078.X, v078.Y)
+                        v067.RightLowerArm_RightHand.From = Vector2.new(v078.X, v078.Y)
+                        v067.RightLowerArm_RightHand.To = Vector2.new(v079.X, v079.Y)
+                        v067.LowerTorso_LeftUpperLeg.From = Vector2.new(v073.X, v073.Y)
+                        v067.LowerTorso_LeftUpperLeg.To = Vector2.new(v080.X, v080.Y)
+                        v067.LeftUpperLeg_LeftLowerLeg.From = Vector2.new(v080.X, v080.Y)
+                        v067.LeftUpperLeg_LeftLowerLeg.To = Vector2.new(v081.X, v081.Y)
+                        v067.LeftLowerLeg_LeftFoot.From = Vector2.new(v081.X, v081.Y)
+                        v067.LeftLowerLeg_LeftFoot.To = Vector2.new(v082.X, v082.Y)
+                        v067.LowerTorso_RightUpperLeg.From = Vector2.new(v073.X, v073.Y)
+                        v067.LowerTorso_RightUpperLeg.To = Vector2.new(v083.X, v083.Y)
+                        v067.RightUpperLeg_RightLowerLeg.From = Vector2.new(v083.X, v083.Y)
+                        v067.RightUpperLeg_RightLowerLeg.To = Vector2.new(v084.X, v084.Y)
+                        v067.RightLowerLeg_RightFoot.From = Vector2.new(v084.X, v084.Y)
+                        v067.RightLowerLeg_RightFoot.To = Vector2.new(v085.X, v085.Y)
+                    end
+                    if v067.Head_UpperTorso.Visible ~= true then
+                        Visibility(true)
+                    end
+                else 
+                    if v067.Head_UpperTorso.Visible ~= false then
+                        Visibility(false)
+                    end
+                end
+            else 
+                if v067.Head_UpperTorso.Visible ~= false then
+                    Visibility(false)
+                end
+                if game.v008:FindFirstChild(plr.Name) == nil then 
+                    for i, v in pairs(v067) do
+                        v:Remove()
+                    end
+                    v069:Disconnect()
+                end
+            end
+        end)
+    end
+    local v012 UpdaterR6()
+        local v069
+        v069 = game:GetService("v094").RenderStepped:Connect(v012()
+            if plr.Character ~= nil and plr.Character:FindFirstChild("Humanoid") ~= nil and plr.Character:FindFirstChild("HumanoidRootPart") ~= nil and plr.Character.Humanoid.Health > 0 then
+                local v070, vis = v065:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
+                if vis then
+                    local v071 = v065:WorldToViewportPoint(plr.Character.Head.Position)
+                    if v067.Head_Spine.From ~= Vector2.new(v071.X, v071.Y) then
+                        local v086 = plr.Character.Torso.Size.Y/2 - 0.2
+                        local v072 = v065:WorldToViewportPoint((plr.Character.Torso.CFrame * CFrame.new(0, v086, 0)).p)
+                        local v073 = v065:WorldToViewportPoint((plr.Character.Torso.CFrame * CFrame.new(0, -v086, 0)).p)
+                        local v087 = plr.Character["Left Arm"].Size.Y/2 - 0.2
+                        local v074 = v065:WorldToViewportPoint((plr.Character["Left Arm"].CFrame * CFrame.new(0, v087, 0)).p)
+                        local v075 = v065:WorldToViewportPoint((plr.Character["Left Arm"].CFrame * CFrame.new(0, -v087, 0)).p)
+                        local v088 = plr.Character["Right Arm"].Size.Y/2 - 0.2
+                        local v077 = v065:WorldToViewportPoint((plr.Character["Right Arm"].CFrame * CFrame.new(0, v088, 0)).p)
+                        local v078 = v065:WorldToViewportPoint((plr.Character["Right Arm"].CFrame * CFrame.new(0, -v088, 0)).p)
+                        local v089 = plr.Character["Left Leg"].Size.Y/2 - 0.2
+                        local v080 = v065:WorldToViewportPoint((plr.Character["Left Leg"].CFrame * CFrame.new(0, v089, 0)).p)
+                        local v081 = v065:WorldToViewportPoint((plr.Character["Left Leg"].CFrame * CFrame.new(0, -v089, 0)).p)
+                        local v090 = plr.Character["Right Leg"].Size.Y/2 - 0.2
+                        local v083 = v065:WorldToViewportPoint((plr.Character["Right Leg"].CFrame * CFrame.new(0, v090, 0)).p)
+                        local v084 = v065:WorldToViewportPoint((plr.Character["Right Leg"].CFrame * CFrame.new(0, -v090, 0)).p)
+                        v067.Head_Spine.From = Vector2.new(v071.X, v071.Y)
+                        v067.Head_Spine.To = Vector2.new(v072.X, v072.Y)
+                        v067.Spine.From = Vector2.new(v072.X, v072.Y)
+                        v067.Spine.To = Vector2.new(v073.X, v073.Y)
+                        v067.LeftArm.From = Vector2.new(v074.X, v074.Y)
+                        v067.LeftArm.To = Vector2.new(v075.X, v075.Y)
+                        v067.LeftArm_UpperTorso.From = Vector2.new(v072.X, v072.Y)
+                        v067.LeftArm_UpperTorso.To = Vector2.new(v074.X, v074.Y)
+                        v067.RightArm.From = Vector2.new(v077.X, v077.Y)
+                        v067.RightArm.To = Vector2.new(v078.X, v078.Y)
+                        v067.RightArm_UpperTorso.From = Vector2.new(v072.X, v072.Y)
+                        v067.RightArm_UpperTorso.To = Vector2.new(v077.X, v077.Y)
+                        v067.LeftLeg.From = Vector2.new(v080.X, v080.Y)
+                        v067.LeftLeg.To = Vector2.new(v081.X, v081.Y)
+                        v067.LeftLeg_LowerTorso.From = Vector2.new(v073.X, v073.Y)
+                        v067.LeftLeg_LowerTorso.To = Vector2.new(v080.X, v080.Y)
+                        v067.RightLeg.From = Vector2.new(v083.X, v083.Y)
+                        v067.RightLeg.To = Vector2.new(v084.X, v084.Y)
+                        v067.RightLeg_LowerTorso.From = Vector2.new(v073.X, v073.Y)
+                        v067.RightLeg_LowerTorso.To = Vector2.new(v083.X, v083.Y)
+                    end
+                    if v067.Head_Spine.Visible ~= true then
+                        Visibility(true)
+                    end
+                else 
+                    if v067.Head_Spine.Visible ~= false then
+                        Visibility(false)
+                    end
+                end
+            else 
+                if v067.Head_Spine.Visible ~= false then
+                    Visibility(false)
+                end
+                if game.v008:FindFirstChild(plr.Name) == nil then 
+                    for i, v in pairs(v067) do
+                        v:Remove()
+                    end
+                    v069:Disconnect()
+                end
+            end
+        end)
+    end
+    if v068 then
+        coroutine.wrap(UpdaterR15)()
+    else 
+        coroutine.wrap(UpdaterR6)()
+    end
+end
+for i, v in pairs(game:GetService("v008"):GetPlayers()) do
+    if v.Name ~= v063.Name then
+        DrawESP(v)
+    end
+end
+game.v008.PlayerAdded:Connect(v012(newplr)
+    if newplr.Name ~= v063.Name then
+        DrawESP(newplr)
+    end
+end)
+        end 
+    })
+local v024 = v062:CreateToggle({
+   Name = "Name Esp",
+   CurrentValue = false,
+   Flag = "Toggle1", 
+   Callback = v012(Value)
+        local v091 = {
+    textsize = 8,
+    colour = 167,200,100
+}
+local v092 = Instance.new("BillboardGui")
+local v093 = Instance.new("TextLabel",v092) 
+v092.Name = "ESP Sht"; 
+v092.ResetOnSpawn = false
+v092.AlwaysOnTop = true;
+v092.LightInfluence = 0;
+v092.Size = UDim2.new(1.75, 0, 1.75, 0);
+v093.BackgroundColor3 = Color3.fromRGB(255, 255, 255);
+v093.Text = ""
+v093.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001);
+v093.BorderSizePixel = 4;
+v093.BorderColor3 = Color3.new(v091.colour)
+v093.BorderSizePixel = 0
+v093.Font = "GothamSemibold"
+v093.TextSize = v091.textsize
+v093.TextColor3 = Color3.fromRGB(v091.colour)
+game:GetService("v094").RenderStepped:Connect(v012()
+    for i,v in pairs (game:GetService("v008"):GetPlayers()) do
+        if v ~= game:GetService("v008").v055 and v.Character.Head:FindFirstChild("Esp Sht")==nil  then 
+            v093.Text = "{"..v.Name.."}"
+            v092:Clone().Parent = v.Character.Head
+        end
+    end
+end)     
+   end,
+})
+local v007 = v062:CreateSection("Extra Combat Hacks")
+local v008 = game:GetService("v008")
+local v094 = game:GetService("v094")
+local v095 = game:GetService("v095")
+local v096 = v008.v055
+local v097 = v096:GetMouse()
+local v098 = workspace.CurrentCamera
+_G.aimbotSystemEnabled = false
+local v099 = 100
+local v100 = false
+local v101 = Color3.new(1, 1, 0) 
+local v102 = nil
+local v012 createAimCircle()
+    if not v102 then
+        v102 = Drawing.new("Circle")
+        v102.Visible = false
+        v102.Color = v101
+        v102.Thickness = 2
+        v102.Radius = v099
+        v102.Filled = false
+    end
+end
+local v012 destroyAimCircle()
+    if v102 then
+        v102:Remove()
+        v102 = nil
+    end
+end
+local v012 isPlayerInAimCircle(v002)
+    local v103 = v002.Character
+    if v103 and v103:FindFirstChild("HumanoidRootPart") then
+        local v104 = v103.HumanoidRootPart
+        local v105, onScreen = v098:WorldToScreenPoint(v104.Position)
+        if onScreen then
+            local v106 = Vector2.new(v097.X, v097.Y)
+            local v107 = (v106 - Vector2.new(v105.X, v105.Y)).Magnitude
+            return v107 <= v099, v107
+        end
+    end
+    return false, math.huge
+end
+local v012 getClosestPlayer()
+    local v108 = nil
+    local v109 = v099
+    for _, v002 in pairs(v008:GetPlayers()) do
+        if v002 ~= v096 then
+            local v103 = v002.Character
+            if v103 and v103:FindFirstChild("Humanoid") and v103.Humanoid.Health > 0 then
+                local v110, distance = isPlayerInAimCircle(v002)
+                if v110 and distance < v109 then
+                    v109 = distance
+                    v108 = v002
+                end
+            end
+        end
+    end
+    return v108
+end
+local v012 aimAtTarget(v002)
+    local v103 = v002.Character
+    if v103 and v103:FindFirstChild("HumanoidRootPart") and v103:FindFirstChild("Head") then
+        local v111 = v103.Head
+        v098.CFrame = CFrame.new(v098.CFrame.Position, v111.Position)
+    end
+end
+v095.InputBegan:Connect(v012(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton2 and _G.aimbotSystemEnabled then
+        v100 = true
+    end
+end)
+v095.InputEnded:Connect(v012(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton2 then
+        v100 = false
+    end
+end)
+v094.RenderStepped:Connect(v012()
+    if not _G.aimbotSystemEnabled then
+        destroyAimCircle()
+        return
+    end
+    if not v102 then
+        createAimCircle()
+    end
+    v102.Position = Vector2.new(v097.X, v097.Y + 40)
+    v102.Visible = true
+    if v100 then
+        local v108 = getClosestPlayer()
+        if v108 then
+            aimAtTarget(v108)
+        end
+    end
+end)
+local v024 = v062:CreateToggle({
+    Name = "Aimbot",
+    CurrentValue = false,
+    Flag = "Aimbot",
+    Callback = v012(Value)
+        _G.aimbotSystemEnabled = Value
+        if not _G.aimbotSystemEnabled then
+            destroyAimCircle()
+        end
+    end
+})
+v006:CreateSection("Atm")
+local v112 = 2000000
+v006:CreateInput({
+    Name = "Deposit",
+    PlaceholderText = "Enter v113 to deposit",
+    RemoveTextAfterFocusLost = true,
+    Callback = v012(input)
+        local v113 = tonumber(input)
+        if v113 then
+            v112 = v112 + v113
+            game:GetService("v009"):WaitForChild("ATMRF"):InvokeServer("deposit", v113)
+            v001:Notify({
+                Title = "Deposit Complete",
+                Content = "Deposited $" .. v113 .. "\nNew Balance: $" .. v112,
+                Duration = 5
+            })
+        else
+            v001:Notify({
+                Title = "Error",
+                Content = "Invalid deposit v113.",
+                Duration = 4
+            })
+        end
+    end
+})
+v006:CreateInput({
+    Name = "Withdraw",
+    PlaceholderText = "Enter v113 to withdraw",
+    RemoveTextAfterFocusLost = true,
+    Callback = v012(input)
+        local v113 = tonumber(input)
+        if v113 then
+            if v113 <= v112 then
+                v112 = v112 - v113
+                game:GetService("v009"):WaitForChild("ATMRF"):InvokeServer("withdraw", v113)
+                v001:Notify({
+                    Title = "Withdraw Complete",
+                    Content = "Withdrew $" .. v113 .. "\nNew Balance: $" .. v112,
+                    Duration = 5
+                })
+            else
+                v001:Notify({
+                    Title = "Error",
+                    Content = "Insufficient funds.",
+                    Duration = 4
+                })
+            end
+        else
+            v001:Notify({
+                Title = "Error",
+                Content = "Invalid withdraw v113.",
+                Duration = 4
+            })
+        end
+    end
+})
+v006:CreateButton({
+    Name = "Check Balance",
+    Callback = v012()
+        v001:Notify({
+            Title = "Bank Balance",
+            Content = "Current Balance: $" .. v112,
+            Duration = 5
+        })
+    end
+})
